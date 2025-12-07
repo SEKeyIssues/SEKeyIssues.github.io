@@ -108,24 +108,12 @@
         border-color: #1e90ff;
       }
 
-      /* 子菜单 */
+      /* 子菜单 — 保留类以便复用 */
       .sub-list {
         list-style: none;
         padding-left: 10px;
         margin-top: 6px;
         display: none;
-      }
-      .sub-item button {
-        background: transparent;
-        border: none;
-        padding: 6px 4px;
-        font-size: 20px;
-        cursor: pointer;
-        color: var(--text-color);
-      }
-      .sub-item button:hover {
-        color: var(--title-color);
-        text-decoration: underline;
       }
 
       /* 右侧卡片 */
@@ -682,6 +670,71 @@
           order: 1;
         }
       }
+
+      /* Published list styling */
+      .published-list {
+        list-style: none;
+        padding: 12px 4px;
+        margin: 0;
+      }
+      .published-list li {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--border);
+        font-size: 20px;
+      }
+      .published-list li a {
+        color: var(--text-color);
+        text-decoration: none;
+        font-weight: 700;
+      }
+      .published-list li a:hover {
+        text-decoration: underline;
+        color: var(--title-color);
+      }
+
+      /* ===== Back button & breadcrumb for issue pages ===== */
+      .issue-topbar {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .back-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(0,0,0,0.06);
+        background: #ffffff;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--title-color);
+        box-shadow: 0 6px 14px rgba(3,60,115,0.04);
+      }
+      .back-btn:hover { transform: translateY(-1px); }
+      .back-icon {
+        width: 14px;
+        height: 14px;
+        display:inline-block;
+        border-left: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        transform: rotate(45deg);
+        margin-right: 2px;
+      }
+      .breadcrumb {
+        font-size: 15px;
+        color: var(--text-color);
+        opacity: 0.95;
+      }
+      .breadcrumb a {
+        color: var(--text-color);
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .breadcrumb a:hover { color: var(--title-color); text-decoration: underline; }
+      .breadcrumb .sep { color: rgba(0,0,0,0.12); margin: 0 8px; }
     </style>
   </head>
 
@@ -703,23 +756,11 @@
               <button class="nav-btn" data-key="process">组织与流程</button>
             </li>
             <li><button class="nav-btn" data-key="template">模板</button></li>
+            <!-- 改成已发布重要问题：去掉展开功能与子列表 -->
             <li>
-              <button class="nav-btn" id="issuesBtn" aria-expanded="false">
-                重要问题 ▼
+              <button class="nav-btn" data-key="published" id="publishedBtn" aria-expanded="false">
+                已发布重要问题
               </button>
-              <ul class="sub-list" id="issuesList" aria-hidden="true">
-                <li class="sub-item">
-                  <button data-key="issue1">自动程序定理证明</button>
-                </li>
-                <li class="sub-item">
-                  <button data-key="issue2">
-                    大规模代码遗产系统的优化与重构
-                  </button>
-                </li>
-                <li class="sub-item">
-                  <button data-key="issue3">自动生成可信程序代码</button>
-                </li>
-              </ul>
             </li>
           </ul>
         </aside>
@@ -729,7 +770,7 @@
           <!-- 默认视图 -->
           <section id="defaultView" class="card" aria-labelledby="navDefault">
             <h3 id="navDefault" class="sr-only">默认视图</h3>
-            <img src="./src/fig1.png" class="auto-img" alt="fig1" />
+            <img src="./src/defaultView.png" class="auto-img" alt="defaultView" />
           </section>
 
           <!-- 背景与动机 -->
@@ -740,7 +781,7 @@
             aria-labelledby="navMotivation"
           >
             <h3 id="navMotivation" class="sr-only">背景与动机</h3>
-            <img src="./src/fig2.png" class="auto-img" alt="fig2" />
+            <img src="./src/background.png" class="auto-img" alt="background" />
             <div
               style="
                 padding: 20px 10px;
@@ -848,12 +889,7 @@
             <h3 id="navProcess" class="sr-only">组织与流程</h3>
             
             <div class="process-container">
-              <!-- 左侧时间线部分 (3/4宽度) -->
-              <div class="timeline-card">
-                <img src="./src/fig4.png" class="auto-img" alt="timeline" style="margin: 0; border-radius: 0;" />
-              </div>
-              
-              <!-- 右侧首届工作组部分 (1/4宽度) -->
+              <!-- 左侧首届工作组部分 (1/4宽度) -->
               <div class="team-card">
                 <div class="team-header">
                   <h2 class="team-title">首届工作组</h2>
@@ -886,7 +922,11 @@
                     <span class="member-name">马晓星</span>
                   </li>
                 </ul>
-                
+              </div>
+
+              <!-- 右侧时间线部分 (3/4宽度) -->
+              <div class="timeline-card">
+                <img src="./src/timeline.png" class="auto-img" alt="timeline" style="margin: 0; border-radius: 0;" />
               </div>
             </div>
           </section>
@@ -898,7 +938,7 @@
             style="display: none"
             aria-labelledby="navTemplate"
           >
-            <h3 id="navTemplate" class="sr-only">模板</h3>
+            <h3 id="navTemplate" class="sr-only">模板与联系方式</h3>
 
             <div class="proposal-template">
               <div class="pt-left">
@@ -952,117 +992,21 @@
                   </li>
                 </ol>
               </div>
-          </section>
-
-          <!-- Issue 1 -->
-          <section
-            id="issue1"
-            class="card issue-slide"
-            style="display: none"
-            aria-labelledby="navIssue1"
-          >
-            <h3 id="navIssue1" class="sr-only">自动程序定理证明</h3>
-            <div class="issue-decor decor-top-left" aria-hidden="true"></div>
-
-            <div class="issue-inner">
-              <header class="issue-header">
-                <h1 class="issue-title">自动程序定理证明</h1>
-                <div class="issue-subtitle">
-                  <span class="label">问题表述：</span>
-                  <span class="subtitle-text"
-                    >如何高度自动化地生成程序定理的形式化证明？</span
-                  >
-                </div>
-              </header>
-
-              <article class="issue-body">
-                <p>
-                  给定程序及其形式化的规约，生成程序满足规约的形式化证明。规约来源包括通用属性规约、人工给定规约以及大语言模型辅助生成的规约；规约内容可涵盖功能属性以及非功能属性。证明必须是能用定理证明器自动验证的，最好同时也是人类易理解的；证明过程可以是全自动的，也可以是半自动交互式的。
-                </p>
-              </article>
-
-              <div class="issue-authors">【马晓星，熊英飞，赵永望】</div>
             </div>
-
-            <div
-              class="issue-decor decor-bottom-right"
-              aria-hidden="true"
-            ></div>
           </section>
 
-          <!-- Issue 2 -->
-          <section
-            id="issue2"
-            class="card issue-slide"
-            style="display: none"
-            aria-labelledby="navIssue2"
-          >
-            <h3 id="navIssue2" class="sr-only">
-              大规模代码遗产系统的优化与重构
-            </h3>
-            <div class="issue-decor decor-top-left" aria-hidden="true"></div>
-
-            <div class="issue-inner">
-              <header class="issue-header">
-                <h1 class="issue-title">大规模代码遗产系统的优化与重构</h1>
-                <div class="issue-subtitle">
-                  <span class="label">问题表述：</span>
-                  <span class="subtitle-text"
-                    >如何对大规模遗产系统开展全自动优化与重构？</span
-                  >
-                </div>
-              </header>
-
-              <article class="issue-body">
-                <p>
-                  大规模代码遗产系统通常缺乏必要的文档、具有复杂的结构和历史积累的技术债务，对其进行维护和重构长期以来一直都是软件工程领域的难题和挑战。非功能属性的优化与功能性修改不同，可以不依赖于特定软件系统的规约，在保证软件功能不变的前提下，提升软件性能、安全性、可移植性等非功能属性。当前人工智能技术的突破与发展，为自动完成非功能属性的优化任务打开了空间。
-                </p>
-              </article>
-
-              <div class="issue-authors">【熊英飞，刘辉，李宣东】</div>
-            </div>
-
-            <div
-              class="issue-decor decor-bottom-right"
-              aria-hidden="true"
-            ></div>
+          <!-- 已发布重要问题（新的页面） -->
+          <section id="published" class="card" style="display: none" aria-labelledby="navPublished">
+            <h3 id="navPublished" class="sr-only">已发布重要问题</h3>
+            <!-- 顶部图片 -->
+            <img src="./src/issues.png" class="auto-img" alt="已发布重要问题" style="margin: 0 0 18px 0; border-radius: 6px;" />
+            <!-- 列表容器，JS 动态填充 -->
+            <ul id="publishedList" class="published-list" aria-live="polite">
+              <li style="color:var(--muted)">正在加载已发布问题……</li>
+            </ul>
           </section>
 
-          <!-- Issue 3 -->
-          <section
-            id="issue3"
-            class="card issue-slide"
-            style="display: none"
-            aria-labelledby="navIssue3"
-          >
-            <h3 id="navIssue3" class="sr-only">自动生成可信程序代码</h3>
-            <div class="issue-decor decor-top-left" aria-hidden="true"></div>
-
-            <div class="issue-inner">
-              <header class="issue-header">
-                <h1 class="issue-title">自动生成可信程序代码</h1>
-                <div class="issue-subtitle">
-                  <span class="label">问题表述：</span>
-                  <span class="subtitle-text"
-                    >给定模块级规模的自然语言功能描述，自动生成达到人工编程可信程度的程序代码。</span
-                  >
-                </div>
-              </header>
-
-              <article class="issue-body">
-                <p>
-                  程序代码自动生成是长期受到软件工程领域关注的难题。以往的研究工作大都是基于形式化的需求规约或设计规约生成程序代码，主要包括基于形式化方法的程序综合、基于逻辑规则的代码生成、基于设计模型的程序生成等，但是这些工作的可扩展性和自动化程度离实际应用要求都有很大距离。当前大语言模型可以从自然语言功能描述直接生成预测性程序代码，为程序代码自动生成打开了空间，如何基于大语言模型自动生成达到人工编程可信程度的程序代码成为进一步期待突破的难题和挑战。
-                </p>
-              </article>
-
-              <div class="issue-authors">【李戈，夏鑫】</div>
-            </div>
-
-            <div
-              class="issue-decor decor-bottom-right"
-              aria-hidden="true"
-            ></div>
-          </section>
+          <!-- 动态注入的 issue 页面容器（JS 会往 mainContent 中插入 issue-section） -->
         </main>
       </div>
     </div>
@@ -1070,60 +1014,295 @@
     <footer class="footer">© 2025 中国计算机学会 软件工程专业委员会</footer>
 
     <script>
-      const sections = [
+      /***********************************************
+       * 动态 Issue 加载与导航（返回仅在页面内重定向到 published）
+       ***********************************************/
+
+      const staticSections = [
         "defaultView",
         "motivation",
         "process",
         "template",
-        "issue1",
-        "issue2",
-        "issue3",
+        "published",
       ];
+      const dynamicSections = [];
+
+      window.issuesData = null;
+      window.issuesLoaded = false;
+
       function showSection(id) {
+        if (!id) id = "defaultView";
+        const needsLoad = !window.issuesLoaded && (id === "published" || id.startsWith("issue-") || id.startsWith("issue"));
+        if (needsLoad) {
+          loadIssues()
+            .then(() => {
+              const realId = resolveIssueId(id);
+              performShow(realId);
+            })
+            .catch((err) => {
+              console.error("加载 issues.json 失败：", err);
+              performShow(id);
+            });
+        } else {
+          const realId = resolveIssueId(id);
+          performShow(realId);
+        }
+      }
+
+      function performShow(id) {
+        const main = document.getElementById("mainContent");
+        const sections = main.querySelectorAll("section");
         sections.forEach((s) => {
-          const el = document.getElementById(s);
-          if (!el) return;
-          el.style.display = s === id ? "" : "none";
+          try { s.style.display = s.id === id ? "" : "none"; } catch (e) {}
         });
+
+        if (!document.getElementById(id)) {
+          id = "defaultView";
+          document.getElementById(id).style.display = "";
+        }
+
         document.querySelectorAll(".nav-btn[data-key]").forEach((b) => {
-          b.classList.toggle("active", b.dataset.key === id);
+          b.classList.toggle("active", b.dataset.key === id || (id && id.startsWith("issue-") && b.dataset.key === "published"));
+        });
+
+        if (location.hash.slice(1) !== id) {
+          history.replaceState(null, "", "#" + id);
+        }
+
+        try { window.scrollTo && window.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) {}
+      }
+
+      function resolveIssueId(requestedId) {
+        if (!requestedId) return "defaultView";
+        if (document.getElementById(requestedId)) return requestedId;
+        if (window.issuesData && Array.isArray(window.issuesData)) {
+          const found = window.issuesData.find((it) => {
+            if (!it) return false;
+            const cand = it._internalId || (it.id ? ("issue-" + String(it.id).toLowerCase().replace(/[^\w\-]/g, "-")) : null);
+            return cand === requestedId || it.id === requestedId || (it.id && ("issue-" + it.id) === requestedId);
+          });
+          if (found) return found._internalId;
+          const idxMatch = requestedId.match(/(\d+)$/);
+          if (idxMatch) {
+            const idx = Number(idxMatch[1]);
+            if (window.issuesData[idx]) return window.issuesData[idx]._internalId;
+          }
+        }
+        if (requestedId === "published") return "published";
+        return "defaultView";
+      }
+
+      function loadIssues() {
+        if (window.issuesLoaded) return Promise.resolve(window.issuesData);
+        return fetch("./issues.json", { cache: "no-cache" })
+          .then((r) => {
+            if (!r.ok) throw new Error("HTTP " + r.status);
+            return r.json();
+          })
+          .then((data) => {
+            if (!Array.isArray(data)) throw new Error("issues.json 必须为数组格式");
+            window.issuesData = data;
+            renderPublishedList(data);
+            renderIssuePages(data);
+            window.issuesLoaded = true;
+            return data;
+          });
+      }
+
+      function safeIdForIssue(orig, idx) {
+        if (orig && typeof orig === "string") {
+          const clean = orig.trim().toLowerCase().replace(/[^\w\-]/g, "-");
+          if (clean.length > 0) return "issue-" + clean;
+        }
+        return "issue-" + idx;
+      }
+
+      function renderPublishedList(list) {
+        const publishedListEl = document.getElementById("publishedList");
+        publishedListEl.innerHTML = "";
+        if (!list || !list.length) {
+          const li = document.createElement("li");
+          li.textContent = "暂时没有已发布的问题。";
+          publishedListEl.appendChild(li);
+          return;
+        }
+        list.forEach((issue, idx) => {
+          const id = safeIdForIssue(issue.id || issue.title || ("issue-" + idx), idx);
+          issue._internalId = id;
+          dynamicSections.push(id);
+
+          const li = document.createElement("li");
+          const a = document.createElement("a");
+          a.href = "#" + id;
+          a.textContent = issue.title || ("问题 " + (idx + 1));
+          a.setAttribute("data-issue-id", id);
+          a.addEventListener("click", (ev) => {
+            ev.preventDefault();
+            showSection(id);
+          });
+          li.appendChild(a);
+          publishedListEl.appendChild(li);
         });
       }
 
-      document.querySelectorAll(".nav-btn[data-key]").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          showSection(btn.dataset.key);
-          const issuesList = document.getElementById("issuesList");
-          if (issuesList && issuesList.style.display === "block") {
-            issuesList.style.display = "none";
-            document.getElementById("issuesBtn").textContent = "重要问题 ▼";
-            document
-              .getElementById("issuesBtn")
-              .setAttribute("aria-expanded", "false");
+      function createTopbarForIssue(sectionEl, issue) {
+        if (sectionEl.querySelector(".issue-topbar")) return;
+        const topbar = document.createElement("div");
+        topbar.className = "issue-topbar";
+
+        // back button: 强制在页面内重定向到已发布（不使用 history.back）
+        const backBtn = document.createElement("button");
+        backBtn.className = "back-btn";
+        backBtn.setAttribute("aria-label", "返回已发布重要问题列表");
+        backBtn.innerHTML = '<span class="back-icon" aria-hidden="true"></span><span>返回</span>';
+        backBtn.addEventListener("click", (ev) => {
+          ev.preventDefault();
+          // 直接在页面内跳转回 published（不会触发浏览器后退）
+          showSection("published");
+        });
+
+        // breadcrumb
+        const bc = document.createElement("div");
+        bc.className = "breadcrumb";
+        const a = document.createElement("a");
+        a.href = "#published";
+        a.textContent = "已发布重要问题";
+        a.addEventListener("click", (ev) => {
+          ev.preventDefault();
+          showSection("published");
+        });
+        const sep = document.createElement("span");
+        sep.className = "sep";
+        sep.textContent = "›";
+        const titleSpan = document.createElement("span");
+        titleSpan.style.fontWeight = "800";
+        titleSpan.textContent = issue.title || "未命名问题";
+
+        bc.appendChild(a);
+        bc.appendChild(sep);
+        bc.appendChild(titleSpan);
+
+        topbar.appendChild(backBtn);
+        topbar.appendChild(bc);
+
+        const inner = sectionEl.querySelector(".issue-inner");
+        if (inner) inner.insertBefore(topbar, inner.firstChild);
+        else sectionEl.insertBefore(topbar, sectionEl.firstChild);
+      }
+
+      function renderIssuePages(list) {
+        if (!Array.isArray(list) || !list.length) return;
+        const main = document.getElementById("mainContent");
+        list.forEach((issue, idx) => {
+          const id = issue._internalId || safeIdForIssue(issue.id || issue.title || ("issue-" + idx), idx);
+          if (document.getElementById(id)) return;
+          const section = document.createElement("section");
+          section.id = id;
+          section.className = "card issue-slide";
+          section.style.display = "none";
+          section.setAttribute("aria-labelledby", id + "-label");
+
+          const title = issue.title || "未命名问题";
+          const label = issue.label || "问题表述：";
+          const subtitle = issue.subtitle || issue.tagline || "";
+          const body = issue.body || (issue.description || "");
+          const authors = Array.isArray(issue.authors) ? issue.authors : (issue.authors ? [issue.authors] : []);
+          const authorsDisplay = authors.length ? authors.join("，") : "";
+
+          section.innerHTML = `
+            <h3 id="${id}-label" class="sr-only">${title}</h3>
+            <div class="issue-decor decor-top-left" aria-hidden="true"></div>
+            <div class="issue-inner">
+              <header class="issue-header">
+                <h1 class="issue-title">${escapeHtml(title)}</h1>
+                <div class="issue-subtitle">
+                  <span class="label">${escapeHtml(label)}</span>
+                  <span class="subtitle-text">${escapeHtml(subtitle)}</span>
+                </div>
+              </header>
+              <article class="issue-body">
+                ${typeof body === "string" ? `<p>${escapeHtml(body)}</p>` : body}
+              </article>
+              <div class="issue-authors">${escapeHtml(authorsDisplay)}</div>
+            </div>
+            <div class="issue-decor decor-bottom-right" aria-hidden="true"></div>
+          `;
+
+          const publishedEl = document.getElementById("published");
+          if (publishedEl && publishedEl.parentNode) {
+            publishedEl.parentNode.insertBefore(section, publishedEl.nextSibling);
+          } else {
+            main.appendChild(section);
+          }
+
+          createTopbarForIssue(section, issue);
+        });
+      }
+
+      function escapeHtml(str) {
+        if (typeof str !== "string") return str;
+        return str
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
+
+      (function init() {
+        document.querySelectorAll(".nav-btn[data-key]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const key = btn.dataset.key;
+            showSection(key);
+          });
+        });
+
+        showSection("defaultView");
+
+        loadIssues().catch((err) => {
+          console.warn("预加载 issues.json 失败：", err);
+          const publishedListEl = document.getElementById("publishedList");
+          if (publishedListEl && publishedListEl.children.length === 0) {
+            const li = document.createElement("li");
+            li.style.color = "var(--muted)";
+            li.textContent = "无法加载已发布问题（请确保 issues.json 与本页面位于同一目录且为数组格式）。";
+            publishedListEl.appendChild(li);
           }
         });
-      });
 
-      const issuesBtn = document.getElementById("issuesBtn");
-      const issuesList = document.getElementById("issuesList");
-      let expanded = false;
-      issuesBtn.addEventListener("click", () => {
-        expanded = !expanded;
-        issuesList.style.display = expanded ? "block" : "none";
-        issuesBtn.textContent = expanded ? "重要问题 ▲" : "重要问题 ▼";
-        issuesBtn.setAttribute("aria-expanded", String(expanded));
-        issuesList.setAttribute("aria-hidden", String(!expanded));
-      });
+        if (location.hash) {
+          const h = location.hash.slice(1);
+          if (h) showSection(h);
+        }
 
-      document.querySelectorAll(".sub-item button").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const key = btn.dataset.key;
-          showSection(key);
+        const observer = new MutationObserver(() => {
+          const allSections = document.querySelectorAll("main > section");
+          for (const s of allSections) {
+            if (getComputedStyle(s).display !== "none") {
+              if (location.hash.slice(1) !== s.id) {
+                history.replaceState(null, "", "#" + s.id);
+              }
+              break;
+            }
+          }
         });
-      });
+        observer.observe(document.getElementById("mainContent"), { childList: true, subtree: true, attributes: true, attributeFilter: ["style"] });
 
-      /* 默认打开视图 */
-      showSection("defaultView");
+        window.addEventListener("hashchange", () => {
+          const h = location.hash.slice(1);
+          if (h) showSection(h);
+        });
+
+        // Escape: 在 issue 页面内回到 published（不使用浏览器后退）
+        window.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" || e.key === "Esc") {
+            const visible = Array.from(document.querySelectorAll("main > section")).find(s => getComputedStyle(s).display !== "none");
+            if (visible && visible.id && visible.id.startsWith("issue-")) {
+              showSection("published");
+            }
+          }
+        });
+      })();
     </script>
   </body>
 </html>
