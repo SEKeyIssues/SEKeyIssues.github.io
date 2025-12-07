@@ -7,29 +7,40 @@
 
     <style>
       :root {
+        /* 主题色与布局 */
         --bg: #ffffff;
         --panel: #f7f9fc;
         --card: #ffffff;
-        --text: #222;
-        --muted: #666;
-        --accent: #1e90ff;
         --border: #e3e8ef;
         --radius: 8px;
         --maxwidth: 1100px;
         --font-sans: "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
         --font-serif: "Noto Serif SC", serif;
+
+        /* 统一的颜色与字体尺寸变量（方便整体修改） */
+        --title-color: #004a9f; /* 全局标题色 */
+        --text-color: #0e3b78; /* 全局正文色（蓝） */
+        --muted: #666666;
+
+        /* 统一尺寸：要点要求：标题 26px、文本 20px */
+        --title-size: 26px;
+        --text-size: 20px;
+
         --footer-h: 50px;
       }
 
-      /* 基本样式 */
+      /* 全局重置与基础 */
       html,
       body {
         margin: 0;
         background: var(--bg);
-        color: var(--text);
+        color: var(--text-color);
         font-family: var(--font-sans);
         padding-bottom: var(--footer-h);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
+
       header.top-header {
         width: 100%;
         text-align: center;
@@ -38,9 +49,10 @@
       }
       .header {
         font-family: var(--font-serif);
-        font-size: 32px;
+        font-size: calc(var(--title-size) * 1.2);
         font-weight: 800;
-        color: var(--accent);
+        color: var(--title-color);
+        margin: 0;
       }
 
       /* 布局 */
@@ -55,6 +67,7 @@
         display: grid;
         grid-template-columns: 230px 1fr;
         gap: 24px;
+        box-sizing: border-box;
       }
 
       /* 左侧 */
@@ -67,7 +80,8 @@
       .nav-title {
         font-weight: 700;
         margin-bottom: 10px;
-        font-size: 18px;
+        font-size: 25px;
+        color: var(--title-color);
       }
       .nav-list {
         list-style: none;
@@ -77,23 +91,24 @@
       .nav-btn {
         width: 100%;
         padding: 10px 12px;
-        font-size: 14px;
+        font-size: 22px;
         background: transparent;
         border: 1px solid transparent;
         border-radius: 6px;
         text-align: left;
         cursor: pointer;
         transition: 0.15s;
+        color: var(--text-color);
       }
       .nav-btn:hover {
-        background: #e6eef7;
+        background: #e9f0fb;
       }
       .nav-btn.active {
         background: #d6e9ff;
         border-color: #1e90ff;
       }
 
-      /* 重要问题子菜单 */
+      /* 子菜单 */
       .sub-list {
         list-style: none;
         padding-left: 10px;
@@ -104,21 +119,22 @@
         background: transparent;
         border: none;
         padding: 6px 4px;
-        font-size: 13px;
+        font-size: 20px;
         cursor: pointer;
-        color: #333;
+        color: var(--text-color);
       }
       .sub-item button:hover {
-        color: var(--accent);
+        color: var(--title-color);
         text-decoration: underline;
       }
 
-      /* 右侧内容区卡片 */
+      /* 右侧卡片 */
       .card {
         background: var(--card);
         padding: 16px;
         border-radius: var(--radius);
         border: 1px solid var(--border);
+        box-sizing: border-box;
       }
       .sr-only {
         position: absolute;
@@ -131,8 +147,6 @@
         white-space: nowrap;
         border: 0;
       }
-
-      /* 图片 */
       img.auto-img {
         max-width: 100%;
         border-radius: 6px;
@@ -140,27 +154,13 @@
         display: block;
       }
 
-      /* process 中 3:1 布局 */
-      .process-row {
-        display: flex;
-        gap: 16px;
-        align-items: flex-start;
-      }
-      .process-left {
-        flex: 3;
-      }
-      .process-right {
-        flex: 1;
-      }
-
-      /* footer */
       footer.footer {
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
         height: var(--footer-h);
-        background: #f7f9fc;
+        background: var(--panel);
         border-top: 1px solid var(--border);
         display: flex;
         align-items: center;
@@ -168,20 +168,523 @@
         font-size: 13px;
         color: #555;
       }
+
       @media (max-width: 900px) {
         .shell {
           grid-template-columns: 1fr;
         }
-        .process-row {
+      }
+
+      /* ===========================
+         Template (proposal template)
+         =========================== */
+      .proposal-template {
+        display: flex;
+        gap: 28px;
+        align-items: flex-start;
+        padding: 18px;
+        box-sizing: border-box;
+      }
+      .pt-left {
+        flex: 1 1 60%;
+        min-width: 280px;
+      }
+      .pt-title {
+        font-family: var(--font-serif);
+        font-size: var(--title-size); /* 26px */
+        color: var(--title-color);
+        font-weight: 800;
+        margin: 6px 0 14px;
+      }
+      .pt-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        counter-reset: item;
+      }
+      .pt-list > li {
+        display: block;
+        margin-bottom: 14px;
+      }
+      .pt-list > li::before {
+        counter-increment: item;
+        content: counter(item) ".";
+        font-weight: 800;
+        font-size: 18px;
+        color: var(--title-color);
+        display: inline-block;
+        width: 36px;
+        margin-right: 8px;
+      }
+      .pt-item-title {
+        display: inline-block;
+        font-weight: 700;
+        color: var(--title-color);
+        font-size: calc(var(--title-size) * 0.95);
+        margin-bottom: 6px;
+      }
+      .pt-item-body {
+        color: var(--text-color);
+        font-size: var(--text-size);
+        line-height: 1.6;
+        margin-top: 6px;
+      }
+
+      .pt-right {
+        flex: 0 0 30%;
+        position: relative;
+        min-width: 180px;
+        height: 220px;
+      }
+      .decor-top,
+      .decor-bottom {
+        position: absolute;
+        background: linear-gradient(
+          180deg,
+          rgba(3, 60, 115, 0.06),
+          rgba(3, 60, 115, 0.03)
+        );
+        border-radius: 8px;
+        box-shadow: 0 6px 18px rgba(3, 60, 115, 0.04);
+      }
+      .decor-top {
+        width: 120px;
+        height: 50px;
+        top: -8px;
+        left: 6%;
+        transform: rotate(-18deg);
+        clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+      }
+      .decor-bottom {
+        width: 220px;
+        height: 140px;
+        bottom: -8px;
+        right: 6%;
+        transform: rotate(12deg);
+        clip-path: polygon(0 10%, 100% 0, 100% 85%, 10% 100%);
+      }
+
+      @media (max-width: 900px) {
+        .proposal-template {
           flex-direction: column;
         }
-        .process-left,
-        .process-right {
-          flex: auto;
+        .pt-right {
+          width: 100%;
+          height: 120px;
+          order: 2;
+        }
+        .pt-left {
+          order: 1;
+        }
+        .pt-title {
+          font-size: calc(var(--title-size) * 0.95);
+        }
+        .pt-item-body {
+          font-size: calc(var(--text-size) * 0.95);
+        }
+      }
+
+      /* ===========================
+         Timeline
+         =========================== */
+      .timeline-container {
+        position: relative;
+        width: 100%;
+        padding: 32px 12px 36px;
+        box-sizing: border-box;
+        min-height: 260px;
+      }
+      .timeline-title {
+        text-align: center;
+        font-size: calc(var(--title-size) * 1.05);
+        font-weight: 800;
+        color: var(--title-color);
+        margin-bottom: 18px;
+      }
+
+      /* 主线 */
+      .timeline-line {
+        position: absolute;
+        left: 5%;
+        right: 5%;
+        height: 6px;
+        background: #d0d3d8;
+        top: 50%;
+        transform: translateY(-50%);
+        border-radius: 4px;
+        z-index: 1;
+      }
+
+      /* 节点容器：均匀分配节点 */
+      .timeline-items {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 0 5%;
+        margin-top: 12px;
+        box-sizing: border-box;
+        position: relative;
+      }
+
+      .timeline-item {
+        position: relative;
+        flex: 1 1 0;
+        min-width: 80px;
+        max-width: 16%;
+        text-align: center;
+        box-sizing: border-box;
+      }
+
+      /* 节点外形 */
+      .timeline-node {
+        width: 84px;
+        height: 76px;
+        background: var(--title-color);
+        color: #fff;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 3;
+      }
+
+      /* 连接线：从节点到说明框（利用伪元素） */
+      .timeline-item .timeline-node::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 100%;
+        width: 2px;
+        height: 12px;
+        background: var(--title-color);
+        transform: translateX(-50%);
+        z-index: 2;
+      }
+
+      /* 说明卡片 */
+      .timeline-box {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 240px;
+        max-width: 28vw;
+        min-width: 180px;
+        padding: 10px 14px;
+        border-radius: 6px;
+        background: #ffe08a;
+        color: #222;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        z-index: 2;
+        box-sizing: border-box;
+      }
+      .timeline-box-top {
+        bottom: calc(50% + 44px);
+        text-align: center;
+      } /* 放在节点上方 */
+      .timeline-box-bottom {
+        top: calc(50% + 44px);
+        text-align: left;
+      } /* 放在节点下方 */
+
+      /* 给说明卡片也画一条从卡片到节点的短线（伪元素），增强可读性 */
+      .timeline-box::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        width: 10px;
+        height: 4px;
+        transform: translateX(-50%);
+        background: transparent;
+      }
+
+      /* 小屏幕改为垂直堆叠，隐藏主线 */
+      @media (max-width: 900px) {
+        .timeline-line {
+          display: none;
+        }
+        .timeline-items {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 28px;
+          padding: 0 6%;
+        }
+        .timeline-item {
+          text-align: left;
+          padding-left: 48px;
+          min-height: 64px;
+        }
+        .timeline-node {
+          position: absolute;
+          left: 6%;
+          top: 6px;
+          transform: none;
+          width: 56px;
+          height: 44px;
+          font-size: 12px;
+        }
+        .timeline-node::after {
+          display: none;
+        }
+        .timeline-box {
+          position: relative;
+          left: 0;
+          transform: none;
+          max-width: 100%;
+          min-width: 0;
+          padding-left: 12px;
+          padding-right: 12px;
+        }
+        .timeline-box-top,
+        .timeline-box-bottom {
+          top: auto;
+          bottom: auto;
+          text-align: left;
+        }
+      }
+
+      /* ===========================
+         Issue slides (important problems)
+         =========================== */
+      .issue-slide {
+        position: relative;
+        overflow: visible;
+        padding: 28px 34px;
+        box-sizing: border-box;
+        min-height: 300px;
+        background: var(--card);
+      }
+      .issue-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+      }
+      .issue-title {
+        font-family: var(--font-serif);
+        color: var(--title-color);
+        font-size: var(--title-size);
+        margin: 6px 0 10px;
+        font-weight: 900;
+      }
+      .issue-subtitle {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        font-size: calc(var(--title-size) * 0.95);
+        color: var(--title-color);
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+      .issue-subtitle .label {
+        font-weight: 800;
+      }
+      .subtitle-text {
+        text-decoration: underline;
+        text-underline-offset: 6px;
+      }
+      .issue-body p {
+        font-size: var(--text-size);
+        line-height: 1.8;
+        color: var(--text-color);
+        margin: 6px 0 22px;
+      }
+      .issue-authors {
+        font-size: var(--text-size);
+        color: var(--text-color);
+        font-weight: 800;
+        text-align: right;
+        margin-top: 20px;
+        padding-right: 6px;
+      }
+
+      .issue-decor {
+        position: absolute;
+        z-index: 1;
+        background: linear-gradient(
+          180deg,
+          rgba(3, 60, 115, 0.06),
+          rgba(3, 60, 115, 0.02)
+        );
+        border-radius: 6px;
+        box-shadow: 0 10px 20px rgba(3, 60, 115, 0.03);
+      }
+      .decor-top-left {
+        width: 120px;
+        height: 120px;
+        top: 8px;
+        left: 8px;
+        transform: rotate(-18deg);
+        clip-path: polygon(10% 0, 100% 0, 100% 30%, 70% 100%, 0 80%);
+      }
+      .decor-bottom-right {
+        width: 200px;
+        height: 200px;
+        right: 18px;
+        bottom: 18px;
+        transform: rotate(12deg);
+        clip-path: polygon(0 10%, 85% 0, 100% 85%, 18% 100%);
+      }
+
+      @media (max-width: 900px) {
+        .issue-title {
+          font-size: calc(var(--title-size) * 0.95);
+        }
+        .issue-subtitle {
+          font-size: calc(var(--title-size) * 0.85);
+          flex-wrap: wrap;
+        }
+        .issue-body p {
+          font-size: calc(var(--text-size) * 0.95);
+          line-height: 1.6;
+        }
+        .issue-authors {
+          font-size: calc(var(--text-size) * 0.9);
+          text-align: left;
+        }
+        .decor-top-left,
+        .decor-bottom-right {
+          display: none;
+        }
+      }
+
+      /* ===========================
+         组织与流程容器（3:1布局）
+         =========================== */
+      .process-container {
+        display: flex;
+        gap: 24px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .timeline-card {
+        flex: 3; /* 3份宽度 */
+        min-width: 0; /* 防止溢出 */
+      }
+
+      .team-card {
+        flex: 1; /* 1份宽度 */
+        min-width: 0;
+        background: linear-gradient(135deg, #f8faff 0%, #e9f2ff 100%);
+        border-left: 4px solid #1a6bb3;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        height: fit-content;
+        max-height: 600px;
+        overflow-y: auto;
+      }
+
+      .team-header {
+        text-align: center;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 2px solid rgba(26, 107, 179, 0.2);
+      }
+
+      .team-title {
+        font-family: var(--font-serif);
+        font-size: calc(var(--title-size) * 0.9);
+        font-weight: 800;
+        color: var(--title-color);
+        margin: 0 0 8px 0;
+      }
+
+      .team-subtitle {
+        font-size: calc(var(--text-size) * 0.75);
+        color: var(--text-color);
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .members-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .member-item {
+        padding: 16px 12px;
+        border-bottom: 1px solid rgba(26, 107, 179, 0.1);
+        font-size: calc(var(--text-size) * 0.85);
+        display: flex;
+        align-items: center;
+        transition: all 0.2s ease;
+        border-radius: 6px;
+        margin-bottom: 8px;
+        background: rgba(255, 255, 255, 0.8);
+      }
+
+      .member-item:hover {
+        background: #e6f0ff;
+        transform: translateX(3px);
+      }
+
+      .member-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+      }
+
+      .member-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        background: linear-gradient(135deg, #1a6bb3 0%, #0d4a8a 100%);
+        color: white;
+        border-radius: 50%;
+        font-weight: 700;
+        margin-right: 16px;
+        font-size: calc(var(--text-size) * 0.7);
+        flex-shrink: 0;
+      }
+
+      .member-name {
+        font-size: calc(var(--text-size) * 0.85);
+        color: var(--text-color);
+        font-weight: 600;
+      }
+
+      .team-footer {
+        margin-top: auto;
+        padding-top: 16px;
+        text-align: center;
+        font-size: calc(var(--text-size) * 0.7);
+        color: #666;
+        border-top: 1px solid rgba(26, 107, 179, 0.1);
+      }
+
+      @media (max-width: 768px) {
+        .process-container {
+          flex-direction: column;
+        }
+        
+        .timeline-card,
+        .team-card {
+          flex: none;
+          width: 100%;
+        }
+        
+        .team-card {
+          order: 2;
+          margin-top: 24px;
+        }
+        
+        .timeline-card {
+          order: 1;
         }
       }
     </style>
   </head>
+
   <body>
     <header class="top-header">
       <div class="header">软件工程重要研究问题征集与发布</div>
@@ -223,13 +726,13 @@
 
         <!-- 右侧内容区 -->
         <main id="mainContent" aria-live="polite">
-          <!-- 默认显示：fig1 -->
+          <!-- 默认视图 -->
           <section id="defaultView" class="card" aria-labelledby="navDefault">
             <h3 id="navDefault" class="sr-only">默认视图</h3>
             <img src="./src/fig1.png" class="auto-img" alt="fig1" />
           </section>
 
-          <!-- 背景与动机：上下陈列 fig2 / fig3 -->
+          <!-- 背景与动机 -->
           <section
             id="motivation"
             class="card"
@@ -238,28 +741,157 @@
           >
             <h3 id="navMotivation" class="sr-only">背景与动机</h3>
             <img src="./src/fig2.png" class="auto-img" alt="fig2" />
-            <img src="./src/fig3.png" class="auto-img" alt="fig3" />
-          </section>
+            <div
+              style="
+                padding: 20px 10px;
+                color: var(--text-color);
+                font-family: var(--font-sans);
+              "
+            >
+              <h2
+                style="
+                  font-size: calc(var(--title-size) * 1.15);
+                  color: var(--title-color);
+                  margin-bottom: 18px;
+                "
+              >
+                "软件工程重要研究问题"征集与发布行动
+              </h2>
 
-          <!-- 组织与流程：左右 3:1 fig4 / fig5 -->
-          <section
-            id="process"
-            class="card"
-            style="display: none"
-            aria-labelledby="navProcess"
-          >
-            <h3 id="navProcess" class="sr-only">组织与流程</h3>
-            <div class="process-row">
-              <div class="process-left">
-                <img src="./src/fig4.png" class="auto-img" alt="fig4" />
+              <div style="display: flex; gap: 12px; margin-bottom: 14px">
+                <div
+                  style="
+                    width: 12px;
+                    height: 12px;
+                    background: var(--title-color);
+                    margin-top: 6px;
+                    border-radius: 2px;
+                  "
+                ></div>
+                <div style="line-height: 1.6">
+                  <div
+                    style="
+                      font-weight: 700;
+                      color: var(--title-color);
+                      margin-bottom: 6px;
+                    "
+                  >
+                    工作动机
+                  </div>
+                  <div style="font-size: var(--text-size)">
+                    凸显学术组织定位，凝聚引导学界共识
+                  </div>
+                </div>
               </div>
-              <div class="process-right">
-                <img src="./src/fig5.png" class="auto-img" alt="fig5" />
+
+              <div style="display: flex; gap: 12px; margin-bottom: 14px">
+                <div
+                  style="
+                    width: 12px;
+                    height: 12px;
+                    background: var(--title-color);
+                    margin-top: 6px;
+                    border-radius: 2px;
+                  "
+                ></div>
+                <div style="line-height: 1.6">
+                  <div
+                    style="
+                      font-weight: 700;
+                      color: var(--title-color);
+                      margin-bottom: 6px;
+                    "
+                  >
+                    机制流程
+                  </div>
+                  <div style="font-size: var(--text-size)">
+                    公开征集，反复论证，分批发布
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 12px">
+                <div
+                  style="
+                    width: 12px;
+                    height: 12px;
+                    background: var(--title-color);
+                    margin-top: 6px;
+                    border-radius: 2px;
+                  "
+                ></div>
+                <div style="line-height: 1.6">
+                  <div
+                    style="
+                      font-weight: 700;
+                      color: var(--title-color);
+                      margin-bottom: 6px;
+                    "
+                  >
+                    目标效果
+                  </div>
+                  <div style="font-size: var(--text-size)">
+                    推动政企支持，推动社区发展
+                  </div>
+                </div>
               </div>
             </div>
           </section>
 
-          <!-- 模板：只放 fig6 -->
+          <!-- 组织与流程（时间线 + 首届工作组） -->
+          <section
+            id="process"
+            class="card"
+            style="display: none; padding: 0;"
+            aria-labelledby="navProcess"
+          >
+            <h3 id="navProcess" class="sr-only">组织与流程</h3>
+            
+            <div class="process-container">
+              <!-- 左侧时间线部分 (3/4宽度) -->
+              <div class="timeline-card">
+                <img src="./src/fig4.png" class="auto-img" alt="timeline" style="margin: 0; border-radius: 0;" />
+              </div>
+              
+              <!-- 右侧首届工作组部分 (1/4宽度) -->
+              <div class="team-card">
+                <div class="team-header">
+                  <h2 class="team-title">首届工作组</h2>
+                  <p class="team-subtitle">工作组成员名单</p>
+                </div>
+                
+                <ul class="members-list">
+                  <li class="member-item">
+                    <span class="member-number">1</span>
+                    <span class="member-name">李宣东</span>
+                  </li>
+                  <li class="member-item">
+                    <span class="member-number">2</span>
+                    <span class="member-name">张东梅</span>
+                  </li>
+                  <li class="member-item">
+                    <span class="member-number">3</span>
+                    <span class="member-name">李戈</span>
+                  </li>
+                  <li class="member-item">
+                    <span class="member-number">4</span>
+                    <span class="member-name">夏鑫</span>
+                  </li>
+                  <li class="member-item">
+                    <span class="member-number">5</span>
+                    <span class="member-name">刘辉</span>
+                  </li>
+                  <li class="member-item">
+                    <span class="member-number">6</span>
+                    <span class="member-name">马晓星</span>
+                  </li>
+                </ul>
+                
+              </div>
+            </div>
+          </section>
+
+          <!-- 模板 -->
           <section
             id="template"
             class="card"
@@ -267,40 +899,169 @@
             aria-labelledby="navTemplate"
           >
             <h3 id="navTemplate" class="sr-only">模板</h3>
-            <img src="./src/fig6.png" class="auto-img" alt="fig6" />
+
+            <div class="proposal-template">
+              <div class="pt-left">
+                <h1 class="pt-title">软件工程重要问题提议模版</h1>
+
+                <ol class="pt-list">
+                  <li>
+                    <div class="pt-item-title">问题描述</div>
+                    <div class="pt-item-body">
+                      <p>
+                        <strong>问题表述：</strong
+                        >一句话表述问题。尽量不超过30个字。
+                      </p>
+                      <p>
+                        <strong>解释说明：</strong
+                        >对问题的进一步解释和界定。尽量不超过150字。
+                      </p>
+                      <p>
+                        <strong>研究现状：</strong
+                        >可选，对该问题研究现状的定性或定量说明。尽量不超过100字。
+                      </p>
+                      <p>
+                        <strong>研究目标：</strong
+                        >说明判定该问题研究取得成功或重要进展的标准。尽量不超过150字。
+                      </p>
+                    </div>
+                  </li>
+
+                  <li>
+                    <div class="pt-item-title">重要意义</div>
+                    <div class="pt-item-body">
+                      对问题重要意义的说明，可分点论述。意义包括学术意义、国家需求、应用价值等一个或多个方面。尽量不超过300字。
+                    </div>
+                  </li>
+
+                  <li>
+                    <div class="pt-item-title">示例或相关工作</div>
+                    <div class="pt-item-body">
+                      给出这个问题上的有代表意义的研究示例或相关工作。可分类说明。尽量不超过300字。
+                    </div>
+                  </li>
+
+                  <li>
+                    <div class="pt-item-title">参考文献</div>
+                    <div class="pt-item-body">不超过10篇。</div>
+                  </li>
+
+                  <li>
+                    <div class="pt-item-title">【提议人】</div>
+                    <div class="pt-item-body">张三、李四</div>
+                  </li>
+                </ol>
+              </div>
           </section>
 
-          <!-- 三个问题：分别整页显示 fig7 / fig8 / fig9 -->
+          <!-- Issue 1 -->
           <section
             id="issue1"
-            class="card"
+            class="card issue-slide"
             style="display: none"
             aria-labelledby="navIssue1"
           >
             <h3 id="navIssue1" class="sr-only">自动程序定理证明</h3>
-            <img src="./src/fig7.png" class="auto-img" alt="fig7" />
+            <div class="issue-decor decor-top-left" aria-hidden="true"></div>
+
+            <div class="issue-inner">
+              <header class="issue-header">
+                <h1 class="issue-title">自动程序定理证明</h1>
+                <div class="issue-subtitle">
+                  <span class="label">问题表述：</span>
+                  <span class="subtitle-text"
+                    >如何高度自动化地生成程序定理的形式化证明？</span
+                  >
+                </div>
+              </header>
+
+              <article class="issue-body">
+                <p>
+                  给定程序及其形式化的规约，生成程序满足规约的形式化证明。规约来源包括通用属性规约、人工给定规约以及大语言模型辅助生成的规约；规约内容可涵盖功能属性以及非功能属性。证明必须是能用定理证明器自动验证的，最好同时也是人类易理解的；证明过程可以是全自动的，也可以是半自动交互式的。
+                </p>
+              </article>
+
+              <div class="issue-authors">【马晓星，熊英飞，赵永望】</div>
+            </div>
+
+            <div
+              class="issue-decor decor-bottom-right"
+              aria-hidden="true"
+            ></div>
           </section>
 
+          <!-- Issue 2 -->
           <section
             id="issue2"
-            class="card"
+            class="card issue-slide"
             style="display: none"
             aria-labelledby="navIssue2"
           >
             <h3 id="navIssue2" class="sr-only">
               大规模代码遗产系统的优化与重构
             </h3>
-            <img src="./src/fig8.png" class="auto-img" alt="fig8" />
+            <div class="issue-decor decor-top-left" aria-hidden="true"></div>
+
+            <div class="issue-inner">
+              <header class="issue-header">
+                <h1 class="issue-title">大规模代码遗产系统的优化与重构</h1>
+                <div class="issue-subtitle">
+                  <span class="label">问题表述：</span>
+                  <span class="subtitle-text"
+                    >如何对大规模遗产系统开展全自动优化与重构？</span
+                  >
+                </div>
+              </header>
+
+              <article class="issue-body">
+                <p>
+                  大规模代码遗产系统通常缺乏必要的文档、具有复杂的结构和历史积累的技术债务，对其进行维护和重构长期以来一直都是软件工程领域的难题和挑战。非功能属性的优化与功能性修改不同，可以不依赖于特定软件系统的规约，在保证软件功能不变的前提下，提升软件性能、安全性、可移植性等非功能属性。当前人工智能技术的突破与发展，为自动完成非功能属性的优化任务打开了空间。
+                </p>
+              </article>
+
+              <div class="issue-authors">【熊英飞，刘辉，李宣东】</div>
+            </div>
+
+            <div
+              class="issue-decor decor-bottom-right"
+              aria-hidden="true"
+            ></div>
           </section>
 
+          <!-- Issue 3 -->
           <section
             id="issue3"
-            class="card"
+            class="card issue-slide"
             style="display: none"
             aria-labelledby="navIssue3"
           >
             <h3 id="navIssue3" class="sr-only">自动生成可信程序代码</h3>
-            <img src="./src/fig9.png" class="auto-img" alt="fig9" />
+            <div class="issue-decor decor-top-left" aria-hidden="true"></div>
+
+            <div class="issue-inner">
+              <header class="issue-header">
+                <h1 class="issue-title">自动生成可信程序代码</h1>
+                <div class="issue-subtitle">
+                  <span class="label">问题表述：</span>
+                  <span class="subtitle-text"
+                    >给定模块级规模的自然语言功能描述，自动生成达到人工编程可信程度的程序代码。</span
+                  >
+                </div>
+              </header>
+
+              <article class="issue-body">
+                <p>
+                  程序代码自动生成是长期受到软件工程领域关注的难题。以往的研究工作大都是基于形式化的需求规约或设计规约生成程序代码，主要包括基于形式化方法的程序综合、基于逻辑规则的代码生成、基于设计模型的程序生成等，但是这些工作的可扩展性和自动化程度离实际应用要求都有很大距离。当前大语言模型可以从自然语言功能描述直接生成预测性程序代码，为程序代码自动生成打开了空间，如何基于大语言模型自动生成达到人工编程可信程度的程序代码成为进一步期待突破的难题和挑战。
+                </p>
+              </article>
+
+              <div class="issue-authors">【李戈，夏鑫】</div>
+            </div>
+
+            <div
+              class="issue-decor decor-bottom-right"
+              aria-hidden="true"
+            ></div>
           </section>
         </main>
       </div>
@@ -343,7 +1104,6 @@
         });
       });
 
-      /* 重要问题按钮：展开/收起子菜单 */
       const issuesBtn = document.getElementById("issuesBtn");
       const issuesList = document.getElementById("issuesList");
       let expanded = false;
@@ -362,6 +1122,7 @@
         });
       });
 
+      /* 默认打开视图 */
       showSection("defaultView");
     </script>
   </body>
