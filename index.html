@@ -3,567 +3,366 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>“软件工程重要研究问题”征集与发布</title>
+    <title>软件工程重要研究问题</title>
+
     <style>
       :root {
-        --bg: #000000;
-        --panel: #071021;
-        --card: linear-gradient(
-          180deg,
-          rgba(18, 24, 33, 0.92),
-          rgba(10, 14, 18, 0.88)
-        );
-        --muted: #9fb7d6;
-        --text: #e6eef6;
-        --accent: #1e90ff; /* 标题强调色 */
-        --card-border: rgba(255, 255, 255, 0.03);
+        --bg: #ffffff;
+        --panel: #f7f9fc;
+        --card: #ffffff;
+        --text: #222;
+        --muted: #666;
+        --accent: #1e90ff;
+        --border: #e3e8ef;
         --radius: 8px;
         --maxwidth: 1100px;
-        --font-sans: "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC",
-          sans-serif;
-        --font-serif: "Noto Serif SC", "Songti SC", "Times New Roman", serif;
-
-        /* footer height 用于 body padding-bottom，防止内容被遮挡 */
-        --footer-h: 56px;
+        --font-sans: "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
+        --font-serif: "Noto Serif SC", serif;
+        --footer-h: 50px;
       }
 
+      /* 基本样式 */
       html,
       body {
-        height: 100%;
         margin: 0;
         background: var(--bg);
         color: var(--text);
         font-family: var(--font-sans);
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        /* 为固定 footer 留出空间，避免遮挡内容 */
         padding-bottom: var(--footer-h);
       }
-
       header.top-header {
         width: 100%;
-        padding: 32px 24px 24px;
         text-align: center;
+        padding: 28px 16px 18px;
         background: var(--bg);
-        position: relative;
-        z-index: 2;
       }
-
       .header {
         font-family: var(--font-serif);
-        font-size: 36px;
+        font-size: 32px;
         font-weight: 800;
         color: var(--accent);
-        margin-bottom: 6px;
-        letter-spacing: 0.6px;
-      }
-      .subtitle {
-        font-family: var(--font-sans);
-        font-size: 13px;
-        color: var(--muted);
-        margin-top: 0;
       }
 
+      /* 布局 */
       .page {
         display: flex;
         justify-content: center;
-        padding: 28px 20px 48px;
-        margin-top: 0; /* 已由 header 控制距离 */
-        position: relative;
-        z-index: 1;
+        padding: 20px 20px 40px;
       }
-
       .shell {
-        width: 100%;
         max-width: var(--maxwidth);
+        width: 100%;
         display: grid;
-        grid-template-columns: 240px 1fr;
+        grid-template-columns: 230px 1fr;
         gap: 24px;
       }
 
-      aside.sidebar {
+      /* 左侧 */
+      .sidebar {
         background: var(--panel);
+        border: 1px solid var(--border);
         padding: 18px;
         border-radius: var(--radius);
-        border: 1px solid var(--card-border);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
-        min-height: 480px;
       }
       .nav-title {
-        font-family: var(--font-serif);
         font-weight: 700;
+        margin-bottom: 10px;
         font-size: 18px;
-        color: var(--text);
-        margin-bottom: 12px;
       }
       .nav-list {
         list-style: none;
         padding: 0;
         margin: 0;
       }
-      .nav-list li {
-        margin: 6px 0;
-      }
       .nav-btn {
-        display: block;
         width: 100%;
-        text-align: left;
         padding: 10px 12px;
-        background: transparent;
-        color: var(--text);
-        border-radius: 6px;
-        border: 1px solid transparent;
-        cursor: pointer;
         font-size: 14px;
-        transition: all 0.12s ease;
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 6px;
+        text-align: left;
+        cursor: pointer;
+        transition: 0.15s;
       }
       .nav-btn:hover {
-        background: rgba(255, 255, 255, 0.02);
-        transform: translateY(-1px);
+        background: #e6eef7;
       }
       .nav-btn.active {
-        background: linear-gradient(
-          90deg,
-          rgba(30, 144, 255, 0.12),
-          rgba(30, 144, 255, 0.06)
-        );
-        border-color: rgba(30, 144, 255, 0.24);
-        box-shadow: 0 8px 18px rgba(30, 144, 255, 0.06);
-        color: var(--text);
+        background: #d6e9ff;
+        border-color: #1e90ff;
       }
 
-      /* 主内容区 */
-      main.content {
-        min-height: 480px;
+      /* 重要问题子菜单 */
+      .sub-list {
+        list-style: none;
+        padding-left: 10px;
+        margin-top: 6px;
+        display: none;
       }
+      .sub-item button {
+        background: transparent;
+        border: none;
+        padding: 6px 4px;
+        font-size: 13px;
+        cursor: pointer;
+        color: #333;
+      }
+      .sub-item button:hover {
+        color: var(--accent);
+        text-decoration: underline;
+      }
+
+      /* 右侧内容区卡片 */
       .card {
         background: var(--card);
+        padding: 16px;
         border-radius: var(--radius);
-        padding: 18px;
-        border: 1px solid var(--card-border);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-        margin-bottom: 16px;
+        border: 1px solid var(--border);
       }
-      h3.section-title {
-        margin: 0 0 8px 0;
-        color: var(--text);
-        font-size: 18px;
-      }
-      .meta {
-        color: var(--muted);
-        font-size: 13px;
-        margin-top: 8px;
-      }
-
-      /* 时间轴样式 */
-      .timeline {
-        position: relative;
-        padding-left: 18px;
-      }
-      .timeline:before {
-        content: "";
+      .sr-only {
         position: absolute;
-        left: 13px;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background: rgba(255, 255, 255, 0.04);
-      }
-      .tl-item {
-        position: relative;
-        margin-bottom: 14px;
-        padding-left: 18px;
-      }
-      .tl-item:before {
-        content: "";
-        position: absolute;
-        left: -9px;
-        top: 3px;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: var(--accent);
-        box-shadow: 0 0 0 6px rgba(30, 144, 255, 0.06);
-      }
-      .kicker {
-        font-size: 12px;
-        color: var(--muted);
-        font-weight: 600;
-      }
-      .item-title {
-        font-weight: 700;
-        color: var(--text);
-        font-size: 15px;
-        margin: 2px 0;
-      }
-      .item-desc {
-        color: #b8cfe6;
-        font-size: 13px;
-        margin: 2px 0 6px 0;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+        border: 0;
       }
 
-      /* 三个问题的折叠（简单模拟） */
-      .expander {
-        border-top: 1px dashed rgba(255, 255, 255, 0.03);
-        padding: 12px 0;
-      }
-      .expander .exp-title {
-        font-weight: 700;
-        color: var(--text);
-        margin-bottom: 6px;
-      }
-      .expander .exp-body {
-        color: #dbeaf8;
-        font-size: 14px;
-        line-height: 1.5;
+      /* 图片 */
+      img.auto-img {
+        max-width: 100%;
+        border-radius: 6px;
+        margin-bottom: 12px;
+        display: block;
       }
 
-      /* footer 固定在底部（最小改动），覆盖文档流 */
+      /* process 中 3:1 布局 */
+      .process-row {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+      }
+      .process-left {
+        flex: 3;
+      }
+      .process-right {
+        flex: 1;
+      }
+
+      /* footer */
       footer.footer {
         position: fixed;
+        bottom: 0;
         left: 0;
         right: 0;
-        bottom: 0;
         height: var(--footer-h);
+        background: #f7f9fc;
+        border-top: 1px solid var(--border);
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(7, 16, 33, 0.95);
-        color: #8ea7c4;
         font-size: 13px;
-        text-align: center;
-        border-top: 1px solid rgba(255, 255, 255, 0.02);
-        z-index: 999;
+        color: #555;
       }
-
       @media (max-width: 900px) {
         .shell {
           grid-template-columns: 1fr;
         }
-        aside.sidebar {
-          order: 0;
-          margin-bottom: 12px;
+        .process-row {
+          flex-direction: column;
+        }
+        .process-left,
+        .process-right {
+          flex: auto;
         }
       }
     </style>
   </head>
-
   <body>
-    <!-- 标题 -->
     <header class="top-header">
-      <div class="header">“软件工程重要研究问题”征集与发布行动</div>
+      <div class="header">软件工程重要研究问题征集与发布</div>
     </header>
 
-    <!--   主体内容  -->
     <div class="page">
-      <div
-        class="shell"
-        role="application"
-        aria-label="软件工程重要研究问题页面"
-      >
-        <!-- 左侧：侧栏导航 -->
+      <div class="shell">
+        <!-- 左侧导航 -->
         <aside class="sidebar" aria-label="页面目录">
           <div class="nav-title">目录</div>
-          <ul class="nav-list" id="navList">
+          <ul class="nav-list">
             <li>
-              <button class="nav-btn active" data-key="background">背景</button>
+              <button class="nav-btn" data-key="motivation">背景与动机</button>
             </li>
             <li>
-              <button class="nav-btn" data-key="timeline">征集时间线</button>
+              <button class="nav-btn" data-key="process">组织与流程</button>
             </li>
+            <li><button class="nav-btn" data-key="template">模板</button></li>
             <li>
-              <button class="nav-btn" data-key="template">问题提议模板</button>
-            </li>
-            <li>
-              <button class="nav-btn" data-key="issues">三个重要问题</button>
+              <button class="nav-btn" id="issuesBtn" aria-expanded="false">
+                重要问题 ▼
+              </button>
+              <ul class="sub-list" id="issuesList" aria-hidden="true">
+                <li class="sub-item">
+                  <button data-key="issue1">自动程序定理证明</button>
+                </li>
+                <li class="sub-item">
+                  <button data-key="issue2">
+                    大规模代码遗产系统的优化与重构
+                  </button>
+                </li>
+                <li class="sub-item">
+                  <button data-key="issue3">自动生成可信程序代码</button>
+                </li>
+              </ul>
             </li>
           </ul>
         </aside>
 
-        <!-- 右侧：主内容区 -->
-        <main class="content" id="mainContent" tabindex="0">
-          <!-- 背景 -->
-          <section
-            id="background"
-            class="card"
-            role="region"
-            aria-labelledby="backgroundTitle"
-          >
-            <h3 id="backgroundTitle" class="section-title">背景与工作动机</h3>
-            <div>
-              <p>
-                <strong>工作目标</strong>：凸显学术组织定位，凝聚引导学界共识
-              </p>
-              <p><strong>机制流程 </strong>：公开征集，反复论证，分批发布</p>
-              <p><strong>目标效果</strong>：推动政企支持，推动社区发展</p>
-            </div>
+        <!-- 右侧内容区 -->
+        <main id="mainContent" aria-live="polite">
+          <!-- 默认显示：fig1 -->
+          <section id="defaultView" class="card" aria-labelledby="navDefault">
+            <h3 id="navDefault" class="sr-only">默认视图</h3>
+            <img src="./src/fig1.png" class="auto-img" alt="fig1" />
           </section>
 
-          <!-- 时间线 -->
+          <!-- 背景与动机：上下陈列 fig2 / fig3 -->
           <section
-            id="timeline"
+            id="motivation"
             class="card"
-            role="region"
-            aria-labelledby="timelineTitle"
             style="display: none"
+            aria-labelledby="navMotivation"
           >
-            <h3 id="timelineTitle" class="section-title">
-              征集时间线（阶段性流程）
-            </h3>
-            <div class="timeline" aria-hidden="false">
-              <div class="tl-item">
-                <div class="kicker">2024.7.20</div>
-                <div class="item-title">
-                  CCF业务总部务虚会，决定启动问题征集
-                </div>
-              </div>
+            <h3 id="navMotivation" class="sr-only">背景与动机</h3>
+            <img src="./src/fig2.png" class="auto-img" alt="fig2" />
+            <img src="./src/fig3.png" class="auto-img" alt="fig3" />
+          </section>
 
-              <div class="tl-item">
-                <div class="kicker">2024.8.26</div>
-                <div class="item-title">
-                  于大连理工大学，开展年度第二次常委会，对软工重要问题的征集范例进行研讨，构建了三个典型范例
-                </div>
+          <!-- 组织与流程：左右 3:1 fig4 / fig5 -->
+          <section
+            id="process"
+            class="card"
+            style="display: none"
+            aria-labelledby="navProcess"
+          >
+            <h3 id="navProcess" class="sr-only">组织与流程</h3>
+            <div class="process-row">
+              <div class="process-left">
+                <img src="./src/fig4.png" class="auto-img" alt="fig4" />
               </div>
-
-              <div class="tl-item">
-                <div class="kicker">2024.9.10</div>
-                <div class="item-title">启动问题征集</div>
-              </div>
-
-              <div class="tl-item">
-                <div class="kicker">2024.10.9</div>
-                <div class="item-title">截止征集，收到24份有效提案</div>
-              </div>
-
-              <div class="tl-item">
-                <div class="kicker">2025.2.22</div>
-                <div class="item-title">
-                  2025年度第一次常委会，对软工重要问题的提案进行了深入研讨
-                </div>
-              </div>
-
-              <div class="tl-item">
-                <div class="kicker">2025.7.30</div>
-                <div class="item-title">
-                  2025年度第二次常委会，研讨三个重要问题的提案
-                </div>
+              <div class="process-right">
+                <img src="./src/fig5.png" class="auto-img" alt="fig5" />
               </div>
             </div>
           </section>
 
-          <!-- 模板 -->
-          <!-- 开始：问题提议模板（可直接放入页面中） -->
+          <!-- 模板：只放 fig6 -->
           <section
             id="template"
             class="card"
-            role="region"
-            aria-labelledby="templateTitle"
             style="display: none"
+            aria-labelledby="navTemplate"
           >
-            <h3 id="templateTitle" class="section-title">
-              软件工程重要问题提议模板
-            </h3>
-
-            <style>
-              :root {
-                --tmpl-indent: 18px;
-              }
-
-              .tmpl-field {
-                margin: 12px 0;
-              }
-              .tmpl-subfield {
-                display: block;
-                margin-left: var(--tmpl-indent);
-                padding-left: 6px;
-                margin-bottom: 8px;
-              }
-              .tmpl-label {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                font-weight: 700;
-                color: #e6eef6;
-                margin-bottom: 6px;
-                font-size: 14px;
-              }
-              .tmpl-desc {
-                color: #dbeaf8;
-                font-size: 14px;
-                line-height: 1.6;
-                margin: 0 0 8px 0;
-              }
-            </style>
-
-            <!-- 1. 问题描述 -->
-            <div class="tmpl-field" aria-labelledby="fld-desc">
-              <div class="tmpl-label" id="fld-desc">
-                <span>1. 问题描述</span>
-              </div>
-
-              <div class="tmpl-subfield">
-                <div class="tmpl-label">
-                  <span>问题表述</span>
-                </div>
-                <div class="tmpl-desc">一句话表述问题。尽量不超过30个字。</div>
-              </div>
-
-              <div class="tmpl-subfield">
-                <div class="tmpl-label">
-                  <span>解释说明</span>
-                </div>
-                <div class="tmpl-desc">
-                  对问题的进一步解释和界定。尽量不超过150字。
-                </div>
-              </div>
-
-              <div class="tmpl-subfield">
-                <div class="tmpl-label">
-                  <span>研究现状（可选）</span>
-                </div>
-                <div class="tmpl-desc">
-                  可选，对该问题研究现状的定性或定量说明。尽量不超过100字。
-                </div>
-              </div>
-
-              <div class="tmpl-subfield">
-                <div class="tmpl-label">
-                  <span>研究目标</span>
-                </div>
-                <div class="tmpl-desc">
-                  说明判定该问题研究取得成功或重要进展的标准。尽量不超过150字。
-                </div>
-              </div>
-            </div>
-
-            <!-- 2. 重要意义 -->
-            <div class="tmpl-field" aria-labelledby="fld-significance">
-              <div class="tmpl-label" id="fld-significance">
-                <span>2. 重要意义</span>
-              </div>
-              <div class="tmpl-desc">
-                对问题重要意义的说明，可分点论述。意义包括学术意义、国家需求、应用价值等一个或多个方面。尽量不超过300字。
-              </div>
-            </div>
-
-            <!-- 3. 示例或相关工作 -->
-            <div class="tmpl-field" aria-labelledby="fld-examples">
-              <div class="tmpl-label" id="fld-examples">
-                <span>3. 示例或相关工作</span>
-              </div>
-              <div class="tmpl-desc">
-                给出这个问题上的有代表意义的研究示例或相关工作。可分类说明。尽量不超过300字。
-              </div>
-            </div>
-
-            <!-- 4. 参考文献 -->
-            <div class="tmpl-field" aria-labelledby="fld-bib">
-              <div class="tmpl-label" id="fld-bib">
-                <span>4. 参考文献</span>
-              </div>
-              <div class="tmpl-desc">不超过10篇</div>
-            </div>
-
-            <!-- 5. 提议人 -->
-            <div class="tmpl-field" aria-labelledby="fld-authors">
-              <div class="tmpl-label" id="fld-authors">
-                <span>5. 提议人信息</span>
-              </div>
-              <div class="tmpl-desc">示例：【张三、李四】</div>
-            </div>
+            <h3 id="navTemplate" class="sr-only">模板</h3>
+            <img src="./src/fig6.png" class="auto-img" alt="fig6" />
           </section>
 
-          <!-- 三个重要问题 -->
+          <!-- 三个问题：分别整页显示 fig7 / fig8 / fig9 -->
           <section
-            id="issues"
+            id="issue1"
             class="card"
-            role="region"
-            aria-labelledby="issuesTitle"
             style="display: none"
+            aria-labelledby="navIssue1"
           >
-            <div class="expander" aria-expanded="true">
-              <div class="exp-title">问题一：自动程序定理证明</div>
-              <div class="exp-body">
-                <p>
-                  <strong>问题表述</strong
-                  >：如何高度自动化地生成程序定理的形式化证明？
-                </p>
-                <p>
-                  <strong>说明</strong
-                  >：给定程序及其形式化的规约，生成程序满足规约的形式化证明。规约来源包括通用属性规约、人工给定规约以及大语言模型辅助生成的规约；规约内容可涵盖功能属性以及非功能属性。证明必须是能用定理证明器自动验证的，最好同时也是人类易理解的；证明过程可以是全自动的，也可以是半自动交互式的。
-                </p>
-                <p>【马晓星，熊英飞，赵永望】</p>
-              </div>
-            </div>
-
-            <div class="expander" aria-expanded="false">
-              <div class="exp-title">
-                问题二：大规模代码遗产系统的优化与重构
-              </div>
-              <div class="exp-body">
-                <p>
-                  <strong>问题表述</strong
-                  >：如何对大规模遗产系统开展全自动优化与重构？
-                </p>
-                <p>
-                  <strong>说明</strong
-                  >：大规模代码遗产系统通常缺乏必要的文档、具有复杂的结构和历史积累的技术债务，对其进行维护和重构长期以来一直都是软件工程领域的难题和挑战。非功能属性的优化与功能性修改不同，可以不依赖于特定软件系统的规约，在保证软件功能不变的前提下，提升软件性能、安全性、可移植性等非功能属性。当前人工智能技术的突破与发展，为自动完成非功能属性的优化任务打开了空间。
-                </p>
-                <p>【熊英飞，刘辉，李宣东】</p>
-              </div>
-            </div>
-
-            <div class="expander" aria-expanded="false">
-              <div class="exp-title">问题三：自动生成可信程序代码</div>
-              <div class="exp-body">
-                <p>
-                  <strong>问题表述</strong
-                  >：给定模块级规模的自然语言功能描述，自动生成达到人工编程可信程度的程序代码。
-                </p>
-                <p>
-                  <strong>说明</strong
-                  >：程序代码自动生成是长期受到软件工程领域关注的难题。以往的研究工作大都是基于形式化的需求规约或设计规约生成程序代码，主要包括基于形式化方法的程序综合、基于逻辑规则的代码生成、基于设计模型的程序生成等，但是这些工作的可扩展性和自动化程度离实际应用要求都有很大距离。当前大语言模型可以从自然语言功能描述直接生成预测性程序代码，为程序代码自动生成打开了空间，如何基于大语言模型自动生成达到人工编程可信程度的程序代码成为进一步期待突破的难题和挑战。
-                </p>
-                <p>【李戈，夏鑫】</p>
-              </div>
-            </div>
+            <h3 id="navIssue1" class="sr-only">自动程序定理证明</h3>
+            <img src="./src/fig7.png" class="auto-img" alt="fig7" />
           </section>
 
-          <!-- footer -->
-          <footer class="footer" role="contentinfo">
-            © 2025 中国计算机学会 软件工程专业委员会 · 重要问题征集与发布行动
-          </footer>
+          <section
+            id="issue2"
+            class="card"
+            style="display: none"
+            aria-labelledby="navIssue2"
+          >
+            <h3 id="navIssue2" class="sr-only">
+              大规模代码遗产系统的优化与重构
+            </h3>
+            <img src="./src/fig8.png" class="auto-img" alt="fig8" />
+          </section>
+
+          <section
+            id="issue3"
+            class="card"
+            style="display: none"
+            aria-labelledby="navIssue3"
+          >
+            <h3 id="navIssue3" class="sr-only">自动生成可信程序代码</h3>
+            <img src="./src/fig9.png" class="auto-img" alt="fig9" />
+          </section>
         </main>
       </div>
     </div>
 
-    <!-- 交互脚本（保持原样） -->
+    <footer class="footer">© 2025 中国计算机学会 软件工程专业委员会</footer>
+
     <script>
-      (function () {
-        const buttons = document.querySelectorAll(".nav-btn");
-        const sections = {
-          background: document.getElementById("background"),
-          timeline: document.getElementById("timeline"),
-          template: document.getElementById("template"),
-          issues: document.getElementById("issues"),
-        };
-
-        function show(key) {
-          buttons.forEach((b) =>
-            b.classList.toggle("active", b.dataset.key === key)
-          );
-          Object.keys(sections).forEach((k) => {
-            sections[k].style.display = k === key ? "" : "none";
-          });
-          sections[key].focus?.();
-        }
-
-        buttons.forEach((b) => {
-          b.addEventListener("click", () => show(b.dataset.key));
+      const sections = [
+        "defaultView",
+        "motivation",
+        "process",
+        "template",
+        "issue1",
+        "issue2",
+        "issue3",
+      ];
+      function showSection(id) {
+        sections.forEach((s) => {
+          const el = document.getElementById(s);
+          if (!el) return;
+          el.style.display = s === id ? "" : "none";
         });
+        document.querySelectorAll(".nav-btn[data-key]").forEach((b) => {
+          b.classList.toggle("active", b.dataset.key === id);
+        });
+      }
 
-        show("background");
-      })();
+      document.querySelectorAll(".nav-btn[data-key]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          showSection(btn.dataset.key);
+          const issuesList = document.getElementById("issuesList");
+          if (issuesList && issuesList.style.display === "block") {
+            issuesList.style.display = "none";
+            document.getElementById("issuesBtn").textContent = "重要问题 ▼";
+            document
+              .getElementById("issuesBtn")
+              .setAttribute("aria-expanded", "false");
+          }
+        });
+      });
+
+      /* 重要问题按钮：展开/收起子菜单 */
+      const issuesBtn = document.getElementById("issuesBtn");
+      const issuesList = document.getElementById("issuesList");
+      let expanded = false;
+      issuesBtn.addEventListener("click", () => {
+        expanded = !expanded;
+        issuesList.style.display = expanded ? "block" : "none";
+        issuesBtn.textContent = expanded ? "重要问题 ▲" : "重要问题 ▼";
+        issuesBtn.setAttribute("aria-expanded", String(expanded));
+        issuesList.setAttribute("aria-hidden", String(!expanded));
+      });
+
+      document.querySelectorAll(".sub-item button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const key = btn.dataset.key;
+          showSection(key);
+        });
+      });
+
+      showSection("defaultView");
     </script>
   </body>
 </html>
