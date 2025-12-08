@@ -701,49 +701,93 @@
       }
 
       /* Published list styling */
+      /* 修改已发布列表的样式，添加数字标记和圆圈 */
       .published-list {
         list-style: none;
         padding: 12px 4px;
         margin: 0;
+        counter-reset: published-counter; /* 创建计数器 */
       }
+
       .published-list li {
-        padding: 10px 12px;
+        position: relative;
+        padding: 14px 12px 14px 60px; /* 左侧增加内边距给圆圈留空间 */
         border-bottom: 1px solid var(--border);
         font-size: 30px;
+        min-height: 60px; /* 确保圆圈有足够空间 */
+        display: flex;
+        align-items: center;
       }
+
+      /* 圆圈样式 */
+      .published-list li::before {
+        counter-increment: published-counter; /* 递增计数器 */
+        content: counter(published-counter); /* 显示计数器值 */
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 44px; /* 圆圈大小 */
+        height: 44px;
+        background-color: var(--title-color);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 22px;
+        box-shadow: 0 4px 8px rgba(0, 74, 159, 0.2);
+        z-index: 1;
+      }
+
+      /* 可选：添加圆圈背景光晕效果 */
+      .published-list li::after {
+        content: "";
+        position: absolute;
+        left: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 52px;
+        height: 52px;
+        background: rgba(0, 74, 159, 0.1);
+        border-radius: 50%;
+        z-index: 0;
+      }
+
       .published-list li a {
         color: var(--text-color);
         text-decoration: none;
         font-weight: 700;
+        display: block;
+        width: 100%;
+        transition: all 0.2s ease;
+        padding: 4px 0;
       }
+
       .published-list li a:hover {
         text-decoration: underline;
         color: var(--title-color);
+        transform: translateX(4px);
       }
 
-      /* Published hero (replaces image) */
-      .published-hero {
-        margin-bottom: 18px;
-        padding: 20px;
-        border-radius: 8px;
-        background: linear-gradient(
-          90deg,
-          rgba(3, 60, 115, 0.06),
-          rgba(3, 60, 115, 0.02)
-        );
-        border: 1px solid rgba(3, 60, 115, 0.06);
-        font-family: var(--font-serif);
-        color: var(--title-color);
-        font-size: 30px;
-        font-weight: 800;
-        line-height: 1.4;
-      }
-      .published-hero small {
-        display: block;
-        margin-top: 8px;
-        font-weight: 600;
-        color: var(--text-color);
-        font-size: 24px;
+      /* 调整移动端样式 */
+      @media (max-width: 900px) {
+        .published-list li {
+          font-size: 26px;
+          padding-left: 56px;
+        }
+
+        .published-list li::before {
+          width: 40px;
+          height: 40px;
+          font-size: 20px;
+        }
+
+        .published-list li::after {
+          width: 48px;
+          height: 48px;
+        }
       }
 
       /* ===== Back button & breadcrumb for issue pages ===== */
@@ -870,7 +914,7 @@
             aria-labelledby="navMotivation"
           >
             <h3 id="navMotivation" class="sr-only">背景与动机</h3>
-            <img src="./src/background.png" class="auto-img" alt="background" />
+            
             <div
               style="
                 padding: 20px 10px;
@@ -959,6 +1003,8 @@
                 </div>
               </div>
             </div>
+
+            <img src="./src/background.png" class="auto-img" alt="background" style="max-width: 90%; margin: 0 auto;" />
           </section>
 
           <!-- 组织与流程（时间线 + 首届工作组） -->
@@ -1081,12 +1127,11 @@
 
                 <!-- 联系方式（新增，联系人标题样式与提案模版标题保持一致） -->
                 <div style="margin-top: 22px">
-                  <div
+                  <!-- <div
                     class="pt-item-title"
                     style="display: block; margin-top: 6px"
-                  >
-                    联系人
-                  </div>
+                  > -->
+                  <h1 class="pt-title" style="color: crimson">联系人</h1>
                   <div class="pt-item-body" style="margin-top: 8px">
                     新提案请通过电子邮件发送给 CCF 软件工程专委秘书处：
                     <a href="mailto:Liuhui08@bit.edu.cn">Liuhui08@bit.edu.cn</a>
@@ -1109,7 +1154,6 @@
             <div class="published-hero" role="img" aria-label="发布说明">
               CCF 软件工程委员会在 2025 CCF
               中国软件大会闭幕式上正式发布了三个软件工程重要研究问题
-              <small>（发布会信息由 CCF 软件工程委员会提供）</small>
             </div>
 
             <!-- 列表容器，JS 动态填充 -->
