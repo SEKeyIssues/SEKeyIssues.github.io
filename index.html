@@ -23,8 +23,9 @@
         --muted: #666666;
 
         /* 统一尺寸：要点要求：标题 26px、文本 20px */
-        --title-size: 26px;
-        --text-size: 20px;
+        --title-size: 30px;
+        --text-size: 28px;
+        --sidebar-font-size: 30px;
 
         --footer-h: 50px;
       }
@@ -80,7 +81,7 @@
       .nav-title {
         font-weight: 700;
         margin-bottom: 10px;
-        font-size: 25px;
+        font-size: var(--sidebar-font-size);
         color: var(--title-color);
       }
       .nav-list {
@@ -91,7 +92,7 @@
       .nav-btn {
         width: 100%;
         padding: 10px 12px;
-        font-size: 22px;
+        font-size: var(--sidebar-font-size);
         background: transparent;
         border: 1px solid transparent;
         border-radius: 6px;
@@ -111,9 +112,31 @@
       /* 子菜单 — 保留类以便复用 */
       .sub-list {
         list-style: none;
-        padding-left: 10px;
-        margin-top: 6px;
+        padding-left: 8px;
+        margin-top: 8px;
         display: none;
+      }
+      .sub-list.show {
+        display: block;
+      }
+
+      /* 栏目侧边子项样式（跟随主样式：字体与大小保持一致，并下划线） */
+      .nav-sub {
+        display: block;
+        padding: 8px 10px;
+        font-size: 20px; /* 保持整体风格大小一致 */
+        color: var(--text-color);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        border-radius: 6px;
+        cursor: pointer;
+        background: transparent;
+        border: none;
+        text-align: left;
+      }
+      .nav-sub:hover {
+        background: #eef6ff;
+        color: var(--title-color);
       }
 
       /* 右侧卡片 */
@@ -654,18 +677,18 @@
         .process-container {
           flex-direction: column;
         }
-        
+
         .timeline-card,
         .team-card {
           flex: none;
           width: 100%;
         }
-        
+
         .team-card {
           order: 2;
           margin-top: 24px;
         }
-        
+
         .timeline-card {
           order: 1;
         }
@@ -692,6 +715,31 @@
         color: var(--title-color);
       }
 
+      /* Published hero (replaces image) */
+      .published-hero {
+        margin-bottom: 18px;
+        padding: 20px;
+        border-radius: 8px;
+        background: linear-gradient(
+          90deg,
+          rgba(3, 60, 115, 0.06),
+          rgba(3, 60, 115, 0.02)
+        );
+        border: 1px solid rgba(3, 60, 115, 0.06);
+        font-family: var(--font-serif);
+        color: var(--title-color);
+        font-size: 20px;
+        font-weight: 800;
+        line-height: 1.4;
+      }
+      .published-hero small {
+        display: block;
+        margin-top: 8px;
+        font-weight: 600;
+        color: var(--text-color);
+        font-size: 16px;
+      }
+
       /* ===== Back button & breadcrumb for issue pages ===== */
       .issue-topbar {
         display: flex;
@@ -705,19 +753,21 @@
         gap: 8px;
         padding: 8px 12px;
         border-radius: 8px;
-        border: 1px solid rgba(0,0,0,0.06);
+        border: 1px solid rgba(0, 0, 0, 0.06);
         background: #ffffff;
         cursor: pointer;
         font-weight: 700;
         font-size: 14px;
         color: var(--title-color);
-        box-shadow: 0 6px 14px rgba(3,60,115,0.04);
+        box-shadow: 0 6px 14px rgba(3, 60, 115, 0.04);
       }
-      .back-btn:hover { transform: translateY(-1px); }
+      .back-btn:hover {
+        transform: translateY(-1px);
+      }
       .back-icon {
         width: 14px;
         height: 14px;
-        display:inline-block;
+        display: inline-block;
         border-left: 2px solid currentColor;
         border-bottom: 2px solid currentColor;
         transform: rotate(45deg);
@@ -733,14 +783,20 @@
         text-decoration: none;
         font-weight: 600;
       }
-      .breadcrumb a:hover { color: var(--title-color); text-decoration: underline; }
-      .breadcrumb .sep { color: rgba(0,0,0,0.12); margin: 0 8px; }
+      .breadcrumb a:hover {
+        color: var(--title-color);
+        text-decoration: underline;
+      }
+      .breadcrumb .sep {
+        color: rgba(0, 0, 0, 0.12);
+        margin: 0 8px;
+      }
     </style>
   </head>
 
   <body>
     <header class="top-header">
-      <div class="header">软件工程重要研究问题征集与发布</div>
+      <div class="header">“软件工程重要研究问题”征集与发布</div>
     </header>
 
     <div class="page">
@@ -755,12 +811,35 @@
             <li>
               <button class="nav-btn" data-key="process">组织与流程</button>
             </li>
-            <li><button class="nav-btn" data-key="template">模板与联系方式</button></li>
-            <!-- 改成已发布重要问题：去掉展开功能与子列表 -->
             <li>
-              <button class="nav-btn" data-key="published" id="publishedBtn" aria-expanded="false">
+              <button class="nav-btn" data-key="template">
+                模板与联系方式
+              </button>
+            </li>
+            <!-- 已发布重要问题：展开子目录 -->
+            <li>
+              <button
+                class="nav-btn"
+                data-key="published"
+                id="publishedBtn"
+                aria-expanded="false"
+                aria-controls="publishedSublist"
+              >
                 已发布重要问题
               </button>
+              <ul
+                id="publishedSublist"
+                class="sub-list"
+                role="menu"
+                aria-label="已发布重要问题列表（侧边）"
+              >
+                <!-- JS 动态填充：每一项为 issues 的 title -->
+                <li
+                  style="color: var(--muted); padding: 6px 8px; font-size: 16px"
+                >
+                  正在加载……
+                </li>
+              </ul>
             </li>
           </ul>
         </aside>
@@ -770,7 +849,11 @@
           <!-- 默认视图 -->
           <section id="defaultView" class="card" aria-labelledby="navDefault">
             <h3 id="navDefault" class="sr-only">默认视图</h3>
-            <img src="./src/defaultView.png" class="auto-img" alt="defaultView" />
+            <img
+              src="./src/defaultView.png"
+              class="auto-img"
+              alt="defaultView"
+            />
           </section>
 
           <!-- 背景与动机 -->
@@ -789,16 +872,6 @@
                 font-family: var(--font-sans);
               "
             >
-              <h2
-                style="
-                  font-size: calc(var(--title-size) * 1.15);
-                  color: var(--title-color);
-                  margin-bottom: 18px;
-                "
-              >
-                "软件工程重要研究问题"征集与发布行动
-              </h2>
-
               <div style="display: flex; gap: 12px; margin-bottom: 14px">
                 <div
                   style="
@@ -815,6 +888,7 @@
                       font-weight: 700;
                       color: var(--title-color);
                       margin-bottom: 6px;
+                      font-size: calc(var(--title-size));
                     "
                   >
                     工作动机
@@ -841,6 +915,7 @@
                       font-weight: 700;
                       color: var(--title-color);
                       margin-bottom: 6px;
+                      font-size: calc(var(--title-size));
                     "
                   >
                     机制流程
@@ -867,6 +942,7 @@
                       font-weight: 700;
                       color: var(--title-color);
                       margin-bottom: 6px;
+                      font-size: calc(var(--title-size));
                     "
                   >
                     目标效果
@@ -883,11 +959,11 @@
           <section
             id="process"
             class="card"
-            style="display: none; padding: 0;"
+            style="display: none; padding: 0"
             aria-labelledby="navProcess"
           >
             <h3 id="navProcess" class="sr-only">组织与流程</h3>
-            
+
             <div class="process-container">
               <!-- 左侧首届工作组部分 (1/4宽度) -->
               <div class="team-card">
@@ -895,7 +971,7 @@
                   <h2 class="team-title">首届工作组</h2>
                   <p class="team-subtitle">工作组成员名单</p>
                 </div>
-                
+
                 <ul class="members-list">
                   <li class="member-item">
                     <span class="member-number">1</span>
@@ -926,7 +1002,12 @@
 
               <!-- 右侧时间线部分 (3/4宽度) -->
               <div class="timeline-card">
-                <img src="./src/timeline.png" class="auto-img" alt="timeline" style="margin: 0; border-radius: 0;" />
+                <img
+                  src="./src/timeline.png"
+                  class="auto-img"
+                  alt="timeline"
+                  style="margin: 0; border-radius: 0"
+                />
               </div>
             </div>
           </section>
@@ -991,18 +1072,43 @@
                     <div class="pt-item-body">张三、李四</div>
                   </li>
                 </ol>
+
+                <!-- 联系方式（新增，联系人标题样式与提案模版标题保持一致） -->
+                <div style="margin-top: 22px">
+                  <div
+                    class="pt-item-title"
+                    style="display: block; margin-top: 6px"
+                  >
+                    联系人
+                  </div>
+                  <div class="pt-item-body" style="margin-top: 8px">
+                    新提案请通过电子邮件发送给 CCF 软件工程专委秘书处：
+                    <a href="mailto:Liuhui08@bit.edu.cn">Liuhui08@bit.edu.cn</a>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
 
           <!-- 已发布重要问题（新的页面） -->
-          <section id="published" class="card" style="display: none" aria-labelledby="navPublished">
+          <section
+            id="published"
+            class="card"
+            style="display: none"
+            aria-labelledby="navPublished"
+          >
             <h3 id="navPublished" class="sr-only">已发布重要问题</h3>
-            <!-- 顶部图片 -->
-            <img src="./src/issues.png" class="auto-img" alt="已发布重要问题" style="margin: 0 0 18px 0; border-radius: 6px;" />
+
+            <!-- 顶部改为文字说明（替换原先图片） -->
+            <div class="published-hero" role="img" aria-label="发布说明">
+              CCF 软件工程委员会在 2025 CCF
+              中国软件大会闭幕式上正式发布了三个软件工程重要研究问题
+              <small>（发布会信息由 CCF 软件工程委员会提供）</small>
+            </div>
+
             <!-- 列表容器，JS 动态填充 -->
             <ul id="publishedList" class="published-list" aria-live="polite">
-              <li style="color:var(--muted)">正在加载已发布问题……</li>
+              <li style="color: var(--muted)">正在加载已发布问题……</li>
             </ul>
           </section>
 
@@ -1016,6 +1122,11 @@
     <script>
       /***********************************************
        * 动态 Issue 加载与导航（返回仅在页面内重定向到 published）
+       * 修改说明（根据用户要求）：
+       * 1. 侧边栏“已发布重要问题”可展开子目录，子目录项来自 issues.json 的 title。
+       *    子目录字体大小与整体风格保持一致，并添加下划线。
+       * 2. 在模板页面下方添加联系方式，联系人标题与“软件工程重要问题提议模版”同样的样式（已在 HTML 中完成）。
+       * 3. 替换已发布页面顶部图片为指定文字并美观渲染（已在 HTML/CSS 中完成）。
        ***********************************************/
 
       const staticSections = [
@@ -1032,11 +1143,22 @@
 
       function showSection(id) {
         if (!id) id = "defaultView";
-        const needsLoad = !window.issuesLoaded && (id === "published" || id.startsWith("issue-") || id.startsWith("issue"));
+        const needsLoad =
+          !window.issuesLoaded &&
+          (id === "published" ||
+            id.startsWith("issue-") ||
+            id.startsWith("issue"));
         if (needsLoad) {
           loadIssues()
             .then(() => {
               const realId = resolveIssueId(id);
+              // if opening published or issue page, expand sidebar published sublist
+              if (
+                realId === "published" ||
+                (realId && realId.startsWith("issue-"))
+              ) {
+                setPublishedExpanded(true);
+              }
               performShow(realId);
             })
             .catch((err) => {
@@ -1045,6 +1167,12 @@
             });
         } else {
           const realId = resolveIssueId(id);
+          if (
+            realId === "published" ||
+            (realId && realId.startsWith("issue-"))
+          ) {
+            setPublishedExpanded(true);
+          }
           performShow(realId);
         }
       }
@@ -1053,23 +1181,32 @@
         const main = document.getElementById("mainContent");
         const sections = main.querySelectorAll("section");
         sections.forEach((s) => {
-          try { s.style.display = s.id === id ? "" : "none"; } catch (e) {}
+          try {
+            s.style.display = s.id === id ? "" : "none";
+          } catch (e) {}
         });
 
         if (!document.getElementById(id)) {
           id = "defaultView";
-          document.getElementById(id).style.display = "";
+          const dv = document.getElementById(id);
+          if (dv) dv.style.display = "";
         }
 
         document.querySelectorAll(".nav-btn[data-key]").forEach((b) => {
-          b.classList.toggle("active", b.dataset.key === id || (id && id.startsWith("issue-") && b.dataset.key === "published"));
+          b.classList.toggle(
+            "active",
+            b.dataset.key === id ||
+              (id && id.startsWith("issue-") && b.dataset.key === "published")
+          );
         });
 
         if (location.hash.slice(1) !== id) {
           history.replaceState(null, "", "#" + id);
         }
 
-        try { window.scrollTo && window.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) {}
+        try {
+          window.scrollTo && window.scrollTo({ top: 0, behavior: "smooth" });
+        } catch (e) {}
       }
 
       function resolveIssueId(requestedId) {
@@ -1078,14 +1215,26 @@
         if (window.issuesData && Array.isArray(window.issuesData)) {
           const found = window.issuesData.find((it) => {
             if (!it) return false;
-            const cand = it._internalId || (it.id ? ("issue-" + String(it.id).toLowerCase().replace(/[^\w\-]/g, "-")) : null);
-            return cand === requestedId || it.id === requestedId || (it.id && ("issue-" + it.id) === requestedId);
+            const cand =
+              it._internalId ||
+              (it.id
+                ? "issue-" +
+                  String(it.id)
+                    .toLowerCase()
+                    .replace(/[^\w\-]/g, "-")
+                : null);
+            return (
+              cand === requestedId ||
+              it.id === requestedId ||
+              (it.id && "issue-" + it.id === requestedId)
+            );
           });
           if (found) return found._internalId;
           const idxMatch = requestedId.match(/(\d+)$/);
           if (idxMatch) {
             const idx = Number(idxMatch[1]);
-            if (window.issuesData[idx]) return window.issuesData[idx]._internalId;
+            if (window.issuesData[idx])
+              return window.issuesData[idx]._internalId;
           }
         }
         if (requestedId === "published") return "published";
@@ -1100,9 +1249,11 @@
             return r.json();
           })
           .then((data) => {
-            if (!Array.isArray(data)) throw new Error("issues.json 必须为数组格式");
+            if (!Array.isArray(data))
+              throw new Error("issues.json 必须为数组格式");
             window.issuesData = data;
             renderPublishedList(data);
+            renderPublishedSidebar(data);
             renderIssuePages(data);
             window.issuesLoaded = true;
             return data;
@@ -1111,7 +1262,10 @@
 
       function safeIdForIssue(orig, idx) {
         if (orig && typeof orig === "string") {
-          const clean = orig.trim().toLowerCase().replace(/[^\w\-]/g, "-");
+          const clean = orig
+            .trim()
+            .toLowerCase()
+            .replace(/[^\w\-]/g, "-");
           if (clean.length > 0) return "issue-" + clean;
         }
         return "issue-" + idx;
@@ -1127,14 +1281,17 @@
           return;
         }
         list.forEach((issue, idx) => {
-          const id = safeIdForIssue(issue.id || issue.title || ("issue-" + idx), idx);
+          const id = safeIdForIssue(
+            issue.id || issue.title || "issue-" + idx,
+            idx
+          );
           issue._internalId = id;
           dynamicSections.push(id);
 
           const li = document.createElement("li");
           const a = document.createElement("a");
           a.href = "#" + id;
-          a.textContent = issue.title || ("问题 " + (idx + 1));
+          a.textContent = issue.title || "问题 " + (idx + 1);
           a.setAttribute("data-issue-id", id);
           a.addEventListener("click", (ev) => {
             ev.preventDefault();
@@ -1142,6 +1299,39 @@
           });
           li.appendChild(a);
           publishedListEl.appendChild(li);
+        });
+      }
+
+      function renderPublishedSidebar(list) {
+        const sublist = document.getElementById("publishedSublist");
+        if (!sublist) return;
+        sublist.innerHTML = "";
+        if (!list || !list.length) {
+          const li = document.createElement("li");
+          li.style.color = "var(--muted)";
+          li.style.padding = "6px 8px";
+          li.textContent = "暂无已发布项";
+          sublist.appendChild(li);
+          return;
+        }
+        list.forEach((issue, idx) => {
+          const id =
+            issue._internalId ||
+            safeIdForIssue(issue.id || issue.title || "issue-" + idx, idx);
+          // ensure internal id stored
+          issue._internalId = id;
+          const li = document.createElement("li");
+          const btn = document.createElement("button");
+          btn.className = "nav-sub";
+          btn.setAttribute("data-issue-id", id);
+          btn.setAttribute("role", "menuitem");
+          btn.textContent = issue.title || "问题 " + (idx + 1);
+          btn.addEventListener("click", (ev) => {
+            ev.preventDefault();
+            showSection(id);
+          });
+          li.appendChild(btn);
+          sublist.appendChild(li);
         });
       }
 
@@ -1154,7 +1344,8 @@
         const backBtn = document.createElement("button");
         backBtn.className = "back-btn";
         backBtn.setAttribute("aria-label", "返回已发布重要问题列表");
-        backBtn.innerHTML = '<span class="back-icon" aria-hidden="true"></span><span>返回</span>';
+        backBtn.innerHTML =
+          '<span class="back-icon" aria-hidden="true"></span><span>返回</span>';
         backBtn.addEventListener("click", (ev) => {
           ev.preventDefault();
           // 直接在页面内跳转回 published（不会触发浏览器后退）
@@ -1194,7 +1385,9 @@
         if (!Array.isArray(list) || !list.length) return;
         const main = document.getElementById("mainContent");
         list.forEach((issue, idx) => {
-          const id = issue._internalId || safeIdForIssue(issue.id || issue.title || ("issue-" + idx), idx);
+          const id =
+            issue._internalId ||
+            safeIdForIssue(issue.id || issue.title || "issue-" + idx, idx);
           if (document.getElementById(id)) return;
           const section = document.createElement("section");
           section.id = id;
@@ -1205,8 +1398,12 @@
           const title = issue.title || "未命名问题";
           const label = issue.label || "问题表述：";
           const subtitle = issue.subtitle || issue.tagline || "";
-          const body = issue.body || (issue.description || "");
-          const authors = Array.isArray(issue.authors) ? issue.authors : (issue.authors ? [issue.authors] : []);
+          const body = issue.body || issue.description || "";
+          const authors = Array.isArray(issue.authors)
+            ? issue.authors
+            : issue.authors
+            ? [issue.authors]
+            : [];
           const authorsDisplay = authors.length ? authors.join("，") : "";
 
           section.innerHTML = `
@@ -1221,7 +1418,9 @@
                 </div>
               </header>
               <article class="issue-body">
-                ${typeof body === "string" ? `<p>${escapeHtml(body)}</p>` : body}
+                ${
+                  typeof body === "string" ? `<p>${escapeHtml(body)}</p>` : body
+                }
               </article>
               <div class="issue-authors">${escapeHtml(authorsDisplay)}</div>
             </div>
@@ -1230,7 +1429,10 @@
 
           const publishedEl = document.getElementById("published");
           if (publishedEl && publishedEl.parentNode) {
-            publishedEl.parentNode.insertBefore(section, publishedEl.nextSibling);
+            publishedEl.parentNode.insertBefore(
+              section,
+              publishedEl.nextSibling
+            );
           } else {
             main.appendChild(section);
           }
@@ -1249,24 +1451,58 @@
           .replace(/'/g, "&#39;");
       }
 
+      function setPublishedExpanded(expanded) {
+        const publishedBtn = document.getElementById("publishedBtn");
+        const sublist = document.getElementById("publishedSublist");
+        if (!publishedBtn || !sublist) return;
+        if (expanded) {
+          sublist.classList.add("show");
+          publishedBtn.setAttribute("aria-expanded", "true");
+        } else {
+          sublist.classList.remove("show");
+          publishedBtn.setAttribute("aria-expanded", "false");
+        }
+      }
+
       (function init() {
         document.querySelectorAll(".nav-btn[data-key]").forEach((btn) => {
           btn.addEventListener("click", () => {
             const key = btn.dataset.key;
-            showSection(key);
+            // Special behavior: if clicking published, toggle sublist visibility as well
+            if (key === "published") {
+              const sublist = document.getElementById("publishedSublist");
+              const isShown = sublist && sublist.classList.contains("show");
+              setPublishedExpanded(!isShown);
+              // Always show the published main page when pressing the parent
+              showSection("published");
+            } else {
+              showSection(key);
+            }
           });
         });
 
         showSection("defaultView");
 
+        // Preload issues (will populate both main published list and sidebar sublist)
         loadIssues().catch((err) => {
           console.warn("预加载 issues.json 失败：", err);
           const publishedListEl = document.getElementById("publishedList");
           if (publishedListEl && publishedListEl.children.length === 0) {
             const li = document.createElement("li");
             li.style.color = "var(--muted)";
-            li.textContent = "无法加载已发布问题（请确保 issues.json 与本页面位于同一目录且为数组格式）。";
+            li.textContent =
+              "无法加载已发布问题（请确保 issues.json 与本页面位于同一目录且为数组格式）。";
             publishedListEl.appendChild(li);
+          }
+          // Sidebar fallback
+          const sublist = document.getElementById("publishedSublist");
+          if (sublist) {
+            sublist.innerHTML = "";
+            const li = document.createElement("li");
+            li.style.color = "var(--muted)";
+            li.style.padding = "6px 8px";
+            li.textContent = "无法加载侧边已发布项";
+            sublist.appendChild(li);
           }
         });
 
@@ -1286,7 +1522,12 @@
             }
           }
         });
-        observer.observe(document.getElementById("mainContent"), { childList: true, subtree: true, attributes: true, attributeFilter: ["style"] });
+        observer.observe(document.getElementById("mainContent"), {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ["style"],
+        });
 
         window.addEventListener("hashchange", () => {
           const h = location.hash.slice(1);
@@ -1296,7 +1537,9 @@
         // Escape: 在 issue 页面内回到 published（不使用浏览器后退）
         window.addEventListener("keydown", function (e) {
           if (e.key === "Escape" || e.key === "Esc") {
-            const visible = Array.from(document.querySelectorAll("main > section")).find(s => getComputedStyle(s).display !== "none");
+            const visible = Array.from(
+              document.querySelectorAll("main > section")
+            ).find((s) => getComputedStyle(s).display !== "none");
             if (visible && visible.id && visible.id.startsWith("issue-")) {
               showSection("published");
             }
@@ -1306,4 +1549,3 @@
     </script>
   </body>
 </html>
-
