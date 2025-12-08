@@ -500,7 +500,9 @@
         margin-bottom: 12px;
       }
       .issue-subtitle .label {
-        font-weight: 800;
+        font-weight: 1000;
+        min-width: 100px;
+        flex-shrink: 0;
       }
       .subtitle-text {
         text-decoration: underline;
@@ -770,6 +772,24 @@
         color: var(--title-color);
         transform: translateX(4px);
       }
+      /* Published hero (replaces image) */
+      .published-hero {
+        margin-bottom: 18px;
+        padding: 20px;
+        border-radius: 8px;
+        background: linear-gradient(
+          90deg,
+          rgba(3, 60, 115, 0.06),
+          rgba(3, 60, 115, 0.02)
+        );
+        border: 1px solid rgba(3, 60, 115, 0.06);
+        font-family: var(--font-serif);
+        color: var(--title-color);
+        font-size: 30px;
+        font-weight: 800;
+        line-height: 1.4;
+        text-align: center;
+      }
 
       /* 调整移动端样式 */
       @media (max-width: 900px) {
@@ -914,7 +934,7 @@
             aria-labelledby="navMotivation"
           >
             <h3 id="navMotivation" class="sr-only">背景与动机</h3>
-            
+
             <div
               style="
                 padding: 20px 10px;
@@ -1004,7 +1024,12 @@
               </div>
             </div>
 
-            <img src="./src/background.png" class="auto-img" alt="background" style="max-width: 90%; margin: 0 auto;" />
+            <img
+              src="./src/background.png"
+              class="auto-img"
+              alt="background"
+              style="max-width: 90%; margin: 0 auto"
+            />
           </section>
 
           <!-- 组织与流程（时间线 + 首届工作组） -->
