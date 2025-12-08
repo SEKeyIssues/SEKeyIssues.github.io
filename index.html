@@ -28,6 +28,8 @@
         --sidebar-font-size: 30px;
 
         --footer-h: 50px;
+        --sidebar-width: 300px;
+        --maxwidth: 1350px;
       }
 
       /* 全局重置与基础 */
@@ -66,9 +68,10 @@
         max-width: var(--maxwidth);
         width: 100%;
         display: grid;
-        grid-template-columns: 230px 1fr;
+        /* grid-template-columns: 230px 1fr; */
         gap: 24px;
         box-sizing: border-box;
+        grid-template-columns: var(--sidebar-width) 1fr;
       }
 
       /* 左侧 */
@@ -124,7 +127,7 @@
       .nav-sub {
         display: block;
         padding: 8px 10px;
-        font-size: 20px; /* 保持整体风格大小一致 */
+        font-size: 25px; /* 保持整体风格大小一致 */
         color: var(--text-color);
         text-decoration: underline;
         text-underline-offset: 4px;
@@ -181,6 +184,9 @@
       }
 
       @media (max-width: 900px) {
+        :root {
+          --sidebar-width: 100%;
+        }
         .shell {
           grid-template-columns: 1fr;
         }
@@ -703,7 +709,7 @@
       .published-list li {
         padding: 10px 12px;
         border-bottom: 1px solid var(--border);
-        font-size: 20px;
+        font-size: 30px;
       }
       .published-list li a {
         color: var(--text-color);
@@ -728,7 +734,7 @@
         border: 1px solid rgba(3, 60, 115, 0.06);
         font-family: var(--font-serif);
         color: var(--title-color);
-        font-size: 20px;
+        font-size: 30px;
         font-weight: 800;
         line-height: 1.4;
       }
@@ -737,7 +743,7 @@
         margin-top: 8px;
         font-weight: 600;
         color: var(--text-color);
-        font-size: 16px;
+        font-size: 24px;
       }
 
       /* ===== Back button & breadcrumb for issue pages ===== */
@@ -1097,7 +1103,7 @@
             style="display: none"
             aria-labelledby="navPublished"
           >
-            <h3 id="navPublished" class="sr-only">已发布重要问题</h3>
+            <!-- <h3 id="navPublished" class="sr-only">已发布重要问题</h3> -->
 
             <!-- 顶部改为文字说明（替换原先图片） -->
             <div class="published-hero" role="img" aria-label="发布说明">
@@ -1374,7 +1380,7 @@
         bc.appendChild(titleSpan);
 
         topbar.appendChild(backBtn);
-        topbar.appendChild(bc);
+        // topbar.appendChild(bc);
 
         const inner = sectionEl.querySelector(".issue-inner");
         if (inner) inner.insertBefore(topbar, inner.firstChild);
